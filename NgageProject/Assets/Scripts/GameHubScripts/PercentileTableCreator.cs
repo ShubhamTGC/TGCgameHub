@@ -14,7 +14,7 @@ public class PercentileTableCreator : MonoBehaviour
     public SimpleSQLManager dbmanager;
     public GameObject dataPrefeb;
     public GameObject ViewPage;
-
+    public HomePageCardSection homepage;
     void Start()
     {
         
@@ -40,7 +40,7 @@ public class PercentileTableCreator : MonoBehaviour
             gb.SetActive(true);
             gb.transform.GetChild(0).transform.GetChild(1).GetComponent<Text>().text = "Players between " + TableLog[a + 1].ToString() + "th to " + TableLog[a].ToString() + "th" + " Percentile";
             Rows.Add(gb);
-            string objectName = TableLog[a + 1].ToString() + "/" + TableLog[a].ToString();
+            string objectName = TableLog[a + 1].ToString() + "/" + TableLog[a].ToString() + "/";
             Button btn = gb.transform.GetChild(0).transform.GetChild(2).gameObject.GetComponent<Button>();
             btn.onClick.RemoveAllListeners();
             btn.onClick.AddListener(delegate { PercentileBasedBoard(objectName, gb.transform, btn); });
@@ -51,9 +51,11 @@ public class PercentileTableCreator : MonoBehaviour
 
     void PercentileBasedBoard(string name,Transform parent,Button btn)
     {
+        Debug.Log(" name  " + name);
         btn.gameObject.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0f, 0f, -90f);
         GameObject gb = Instantiate(dataPrefeb, parent, false);
         gb.name = name;
+        gb.GetComponent<PercentileRangeLb>().homepage = homepage;
         StartCoroutine(RefreshBoard());
         btn.onClick.RemoveAllListeners();
         btn.onClick.AddListener(delegate { CleanPercentileBoard(name,parent,btn,gb); });

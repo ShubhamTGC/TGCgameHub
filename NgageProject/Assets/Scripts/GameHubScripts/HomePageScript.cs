@@ -53,6 +53,7 @@ public class HomePageScript : MonoBehaviour
 
     public GameObject LogOutpage;
     public GameObject AppupdatePage;
+    private bool GoogleLogin;
 
     public void Awake()
     {
@@ -127,8 +128,7 @@ public class HomePageScript : MonoBehaviour
 
     IEnumerator GetuserAvatar()
     {
-        DownloadDone = false;
-        Loadingpage.SetActive(true);
+        
         string HittingUrl = $"{MainUrls.BaseUrl}{MainUrls.GetavatarPicApi}";
         WWW AvatarLog = new WWW(HittingUrl);
         yield return AvatarLog;
@@ -144,7 +144,15 @@ public class HomePageScript : MonoBehaviour
                 Ids.Add(x.Id_Avatar);
 
             });
-            StartCoroutine(AfterLoginTask());
+            if (GoogleLogin)
+            {
+                StartCoroutine(GoogleLoginTask());
+            }
+            else
+            {
+                StartCoroutine(AfterLoginTask());
+            }
+            
         }
     }
 
@@ -208,6 +216,7 @@ public class HomePageScript : MonoBehaviour
     }
      void OnEnable()
     {
+        GoogleLogin = false;
         if (Homepage != null)
         {
             Destroy(Homepage);
@@ -449,8 +458,10 @@ public class HomePageScript : MonoBehaviour
                             }
                             
                             yield return new WaitForSeconds(3.5f);
+                            DownloadDone = false;
+                            Loadingpage.SetActive(true);
                             StartCoroutine(GetGameDetailsProcess());
-                            StartCoroutine(GetuserAvatar());
+                            
                             
                         }
                     }
@@ -541,6 +552,7 @@ public class HomePageScript : MonoBehaviour
                             int avatarid = Convert.ToInt32(LoginLog.Id_Avatar != null ? LoginLog.Id_Avatar : 0);
                             PlayerPrefs.SetString("Loggedin", "true");
                             string msg = "Logged in Successfully!!!";
+                            GoogleLogin = true;
                             StartCoroutine(ShowPopUp(msg,happy));
                             var localLog = dbmanager.Table<ProfileSetup>().FirstOrDefault();
                             if(localLog == null)
@@ -571,11 +583,11 @@ public class HomePageScript : MonoBehaviour
                                 dbmanager.UpdateTable(localLog);
 
                             }
-                            StartCoroutine(GetGameDetailsProcess());
-                            StartCoroutine(GetuserAvatar());
-                            Debug.Log(" response data " + response);
+
                             yield return new WaitForSeconds(3.5f);
-                            StartCoroutine(GoogleLoginTask());
+                            StartCoroutine(GetGameDetailsProcess());
+                            
+                            
                         }
                     }
                 }
@@ -603,11 +615,13 @@ public class HomePageScript : MonoBehaviour
         {
             LoginPage.SetActive(false);
             ProfileSetuppage.SetActive(true);
+            DownloadDone = true;
         }
         else
         {
             LoginPage.SetActive(false);
             GameSelectionpage.SetActive(true);
+            DownloadDone = true;
         }
 
     }
@@ -622,6 +636,7 @@ public class HomePageScript : MonoBehaviour
             RegistrationPage.SetActive(false);
             LoginPage.SetActive(false);
             ProfileSetuppage.SetActive(true);
+            DownloadDone = true;
         }
         else
         {
@@ -629,6 +644,7 @@ public class HomePageScript : MonoBehaviour
             RegistrationPage.SetActive(false);
             LoginPage.SetActive(false);
             GameSelectionpage.SetActive(true);
+            DownloadDone = true;
         }
     }
 
@@ -1337,8 +1353,8 @@ public class HomePageScript : MonoBehaviour
                     StartCoroutine(GetTexture(RectImageId[a], RectImageUrl[a], RectImagepreviewFolder));
                 }
                 yield return new WaitForSeconds(2f);
-
-                DownloadDone = true;
+                StartCoroutine(GetuserAvatar());
+                
             }
         }
     }

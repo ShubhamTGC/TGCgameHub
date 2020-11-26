@@ -33,7 +33,7 @@ public class HomePageCardSection : MonoBehaviour
     public List<Text> Gamenames;
     private void Awake()
     {
-        StartCoroutine(AvatarSelection());
+        
     }
     void Start()
     {
@@ -44,6 +44,7 @@ public class HomePageCardSection : MonoBehaviour
     {
         StartCoroutine(GetCardImage());
         StartCoroutine(GetOverAllScore());
+        StartCoroutine(AvatarSelection());
         initialtemppos = initialPos;
         LastTempPos = lastPos;
         Appversion.text = "Version : " + Application.version;
