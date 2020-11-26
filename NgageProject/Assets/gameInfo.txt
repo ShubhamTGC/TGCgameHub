@@ -1,0 +1,79 @@
+DELETE from AnagramGameList
+DELETE from GameListDetails
+DELETE from MonsterDetails
+DELETE from ObjectGameList
+DELETE from QuizGameList
+DELETE from TruckCenterDetails
+DELETE from TruckGameList
+DELETE from MatchTheTileFlag
+DELETE from MatchTheTileLocation
+
+
+
+Text color 542B81
+
+com.TGC.IosTest
+
+tech@gmail.com
+123456
+
+aman@gmail.com
+aman123
+
+==========================================test id============================================
+
+tech@gmail.com
+s123==
+
+======================================  DRAG AND DROP GAME=================================== 
+
+Beers:
+
+Doombar
+moonlight
+Speckled 
+carling 
+fosters 
+pasieka  
+shramms 
+the monte 
+guinnes 
+imperial 
+
+
+
+
+
+
+Wiskey:
+
+Ridgemont
+Four rose
+Michters
+Basil Haydens 
+jack daniels 
+Ardbeg 
+balltines 
+chivas regal 
+jhonnie walker 
+jameson irish
+
+
+
+
+Wins:
+
+cabarnet sauvignon 
+radius merlot 
+sonoma cutrer 
+vievite 
+vallonne vineyards 
+whispering angel 
+Lucien albrecht 
+Magnum 
+york vineyards 
+sula vineyards
+
+
+
+
