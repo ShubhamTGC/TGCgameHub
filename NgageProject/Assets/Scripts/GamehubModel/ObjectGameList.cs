@@ -9,4 +9,5 @@ public class ObjectGameList
     public string ItemName { get; set; }
     public int CorrectPoint { get; set; }
     public int WrongPoint { get; set; }
+    public int CompletionScore { get; set; }
 }

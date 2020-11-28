@@ -171,7 +171,7 @@ public class Zonehandler : MonoBehaviour
     private List<int> LocalroomId = new List<int>();
     public GameObject LeaderBoardPage;
     public GameObject BarHeading;
-
+    public GameObject LightObject, barobject;
     void Start()
     {
 
@@ -1245,10 +1245,10 @@ public class Zonehandler : MonoBehaviour
 
         if (isBelongToBottleType)
         {
-            BarHeading.transform.GetChild(0).gameObject.GetComponent<LightEffect>().iscorrect = true;
-            BarHeading.transform.GetChild(1).gameObject.GetComponent<LightEffect>().iscorrect = true;
-            BarHeading.transform.GetChild(0).gameObject.GetComponent<LightEffect>().enabled = true;
-            BarHeading.transform.GetChild(1).gameObject.GetComponent<LightEffect>().enabled = true;
+            LightObject.GetComponent<LightEffect>().iscorrect = true;
+            LightObject.GetComponent<LightEffect>().enabled = true;
+            barobject.GetComponent<LightEffect>().iscorrect = true;
+            barobject.GetComponent<LightEffect>().enabled = true;
 
             var index = CurrentItemList.FindIndex(x => x.Equals(bottlename, System.StringComparison.OrdinalIgnoreCase));
             CorrectEfffect.transform.localPosition = new Vector3(containerpos, CorrectEfffect.transform.localPosition.y, 0);
@@ -1270,10 +1270,10 @@ public class Zonehandler : MonoBehaviour
         }
         else
         {
-            BarHeading.transform.GetChild(0).gameObject.GetComponent<LightEffect>().iscorrect = false;
-            BarHeading.transform.GetChild(1).gameObject.GetComponent<LightEffect>().iscorrect = false;
-            BarHeading.transform.GetChild(0).gameObject.GetComponent<LightEffect>().enabled = false;
-            BarHeading.transform.GetChild(1).gameObject.GetComponent<LightEffect>().enabled = false;
+            LightObject.GetComponent<LightEffect>().iscorrect = false;
+            LightObject.GetComponent<LightEffect>().enabled = true;
+            barobject.GetComponent<LightEffect>().iscorrect = false;
+            barobject.GetComponent<LightEffect>().enabled = true;
             var RelatedDustbin = (from k in Bardata
                                   where k.Value.Any(x => x.Equals(bottlename, System.StringComparison.OrdinalIgnoreCase))
                                   select k.Key).FirstOrDefault();
@@ -1437,7 +1437,7 @@ public class Zonehandler : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         msgbox.text = "";
         PopupPage.SetActive(false);
-        LeaderBoardPage.SetActive(false);
+        LeaderBoardPage.SetActive(true);
     }
     IEnumerator GameScorePosting()
     {

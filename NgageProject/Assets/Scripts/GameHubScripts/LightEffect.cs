@@ -30,5 +30,6 @@ public class LightEffect : MonoBehaviour
             this.gameObject.GetComponent<Image>().color = Initialcolor;
             yield return new WaitForSeconds(time);
         }
+        this.gameObject.GetComponent<LightEffect>().enabled = false;
     }
 }

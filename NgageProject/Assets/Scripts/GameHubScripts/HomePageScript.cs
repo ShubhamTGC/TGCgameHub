@@ -144,6 +144,14 @@ public class HomePageScript : MonoBehaviour
                 Ids.Add(x.Id_Avatar);
 
             });
+
+            yield return new WaitForSeconds(0.5f);
+            for (int a = 0; a < Urls.Count; a++)
+            {
+                yield return new WaitForSeconds(0.2f);
+                StartCoroutine(GetTexture(Ids[a], Urls[a], AvatarDir));
+            }
+
             if (GoogleLogin)
             {
                 StartCoroutine(GoogleLoginTask());
@@ -672,6 +680,9 @@ public class HomePageScript : MonoBehaviour
                 List<Truckdestinationdrivinglist> TruckcenterConfig = Gamelog.truckdestinationdrivinglist;
                 List<matchthetiletypelist> MatchTheTileLocation = Gamelog.matchthetiletypelist;
                 List<matchthetilelist> MatchTheTileFlag = Gamelog.matchthetilelist;
+                List<enemieslist> enemylist = Gamelog.enemieslist;
+                List<attacktoollist> attacktoollist = Gamelog.attacktoollist;
+                List<herelist> herolist = Gamelog.herelist;
 
 
                 //Debug.Log(" gameconfig " + gameconfig.Count + " anagramconfig " + anagramconfig.Count + " Quizconfig " + Quizconfig.Count + " ObjectgameConfig : "  + ObjectgameConfig.Count + " MonsterConfig : " + MonsterConfig.Count + " TruckConfig :  " + TruckConfig.Count
@@ -696,7 +707,7 @@ public class HomePageScript : MonoBehaviour
 
                         };
                         dbmanager.Insert(Gamedetails);
-                        if (x.Id_Game == 1)
+                        if (x.Id_Game == 1 )
                         {
                             // Drag and drop game data save and update
                             ObjectgameConfig.ForEach(a =>
@@ -711,7 +722,8 @@ public class HomePageScript : MonoBehaviour
                                         ItemId = a.item_Id,
                                         ItemName = a.item_Name,
                                         CorrectPoint = a.correct_point,
-                                        WrongPoint = a.Wrong_point
+                                        WrongPoint = a.Wrong_point,
+                                        CompletionScore = a.Complete_Score.GetValueOrDefault(0)
                                     };
                                     dbmanager.Insert(ObjectNewLog);
                                 }
@@ -723,6 +735,7 @@ public class HomePageScript : MonoBehaviour
                                     objectLog.ItemName = a.item_Name;
                                     objectLog.CorrectPoint = a.correct_point;
                                     objectLog.WrongPoint = a.Wrong_point;
+                                    objectLog.CompletionScore = a.Complete_Score.GetValueOrDefault(0);
                                     dbmanager.UpdateTable(objectLog);
                                 }
                             });
@@ -766,7 +779,7 @@ public class HomePageScript : MonoBehaviour
                            
                         }
 
-                        if (x.Id_Game == 3)
+                        if (x.Id_Game == 3 )
                         {
                             ObjectgameConfig.ForEach(c =>
                             {
@@ -780,7 +793,8 @@ public class HomePageScript : MonoBehaviour
                                         ItemId = c.item_Id,
                                         ItemName = c.item_Name,
                                         CorrectPoint = c.correct_point,
-                                        WrongPoint = c.Wrong_point
+                                        WrongPoint = c.Wrong_point,
+                                        CompletionScore = c.Complete_Score.GetValueOrDefault(0)
                                     };
                                     dbmanager.Insert(objectddata);
                                 }
@@ -792,6 +806,7 @@ public class HomePageScript : MonoBehaviour
                                     ObjectLog.ItemName = c.item_Name;
                                     ObjectLog.CorrectPoint = c.correct_point;
                                     ObjectLog.WrongPoint = c.Wrong_point;
+                                    ObjectLog.CompletionScore = c.Complete_Score.GetValueOrDefault(0);
                                     dbmanager.UpdateTable(ObjectLog);
                                 }
                             });
@@ -986,6 +1001,81 @@ public class HomePageScript : MonoBehaviour
                             });
                         }
 
+                        if (x.Id_Game == 7 )
+                        {
+                            herolist.ForEach(h =>
+                            {
+                                var Herolocal = dbmanager.Table<HeroList>().FirstOrDefault(w => w.HeroId == h.Id_hero);
+                                if (Herolocal == null)
+                                {
+                                    HeroList HLog = new HeroList
+                                    {
+                                        GameId = h.Id_Game,
+                                        RoomId = h.Id_Room,
+                                        HeroId = h.Id_hero,
+                                        HeroName = h.HeroName
+                                    };
+                                    dbmanager.Insert(HLog);
+                                }
+                                else
+                                {
+                                    Herolocal.GameId = h.Id_Game;
+                                    Herolocal.RoomId = h.Id_Room;
+                                    Herolocal.HeroId = h.Id_hero;
+                                    Herolocal.HeroName = h.HeroName;
+                                    dbmanager.UpdateTable(Herolocal);
+                                }
+                            });
+                            enemylist.ForEach(e =>
+                            {
+                                var Enemylog = dbmanager.Table<EnemyList>().FirstOrDefault(m => m.EnemyId == e.Id_enemies);
+                                if(Enemylog == null)
+                                {
+                                    EnemyList ELog = new EnemyList
+                                    {
+                                        EnemyId = e.Id_enemies,
+                                        GameId = e.Id_Game,
+                                        RoomId = e.Id_Room,
+                                        EnemyName = e.EnemiesName
+                                    };
+                                    dbmanager.Insert(ELog);
+                                }
+                                else
+                                {
+                                    Enemylog.EnemyId = e.Id_enemies;
+                                    Enemylog.GameId = e.Id_Game;
+                                    Enemylog.RoomId = e.Id_Room;
+                                    Enemylog.EnemyName = e.EnemiesName;
+                                    dbmanager.UpdateTable(Enemylog);
+                                }
+
+                            });
+                            attacktoollist.ForEach(t =>
+                            {
+                                var ToolLog = dbmanager.Table<AttackToolList>().FirstOrDefault(u => u.ToolId == t.Id_attacktool);
+                                if (ToolLog == null)
+                                {
+                                    AttackToolList Tlog = new AttackToolList
+                                    {
+                                        GameId = t.Id_Game,
+                                        RoomId = t.Id_Room,
+                                        ToolId = t.Id_attacktool,
+                                        ToolName = t.AttacktoolName
+                                    };
+                                    dbmanager.Insert(Tlog);
+
+                                }
+                                else
+                                {
+                                    ToolLog.GameId = t.Id_Game;
+                                    ToolLog.RoomId = t.Id_Room;
+                                    ToolLog.ToolId = t.Id_attacktool;
+                                    ToolLog.ToolName = t.AttacktoolName;
+                                    dbmanager.UpdateTable(ToolLog);
+                                }
+                            });
+                        }
+
                         RectImageId.Add(x.Id_Game);
                         RectImageUrl.Add(x.RectangleImgURL);
                         RoundimageId.Add(x.Id_Game);
@@ -1013,7 +1103,8 @@ public class HomePageScript : MonoBehaviour
                                             ItemId = a.item_Id,
                                             ItemName = a.item_Name,
                                             CorrectPoint = a.correct_point,
-                                            WrongPoint = a.Wrong_point
+                                            WrongPoint = a.Wrong_point,
+                                            CompletionScore = a.Complete_Score.GetValueOrDefault(0)
                                         };
                                         dbmanager.Insert(ObjectNewLog);
                                     }
@@ -1025,6 +1116,7 @@ public class HomePageScript : MonoBehaviour
                                         objectLog.ItemName = a.item_Name;
                                         objectLog.CorrectPoint = a.correct_point;
                                         objectLog.WrongPoint = a.Wrong_point;
+                                        objectLog.CompletionScore = a.Complete_Score.GetValueOrDefault(0);
                                         dbmanager.UpdateTable(objectLog);
                                     }
                                 });
@@ -1089,7 +1181,8 @@ public class HomePageScript : MonoBehaviour
                                             ItemId = c.item_Id,
                                             ItemName = c.item_Name,
                                             CorrectPoint = c.correct_point,
-                                            WrongPoint = c.Wrong_point
+                                            WrongPoint = c.Wrong_point,
+                                            CompletionScore = c.Complete_Score.GetValueOrDefault(0)
                                         };
                                         dbmanager.Insert(objectddata);
                                     }
@@ -1101,6 +1194,7 @@ public class HomePageScript : MonoBehaviour
                                         ObjectLog.ItemName = c.item_Name;
                                         ObjectLog.CorrectPoint = c.correct_point;
                                         ObjectLog.WrongPoint = c.Wrong_point;
+                                        ObjectLog.CompletionScore = c.Complete_Score.GetValueOrDefault(0);
                                         dbmanager.UpdateTable(ObjectLog);
                                     }
                                 });
@@ -1259,7 +1353,6 @@ public class HomePageScript : MonoBehaviour
                             }
                         }
 
-
                         if(x.Id_Game ==6 && LocalgameConfig.GameId == 6)
                         {
                             if(x.UpdatedFlag > LocalgameConfig.UpdateFlag)
@@ -1301,6 +1394,85 @@ public class HomePageScript : MonoBehaviour
                             }
                         }
 
+                        if (x.Id_Game == 7 && LocalgameConfig.GameId == 7)
+                        {
+                            if (x.UpdatedFlag > LocalgameConfig.UpdateFlag)
+                            {
+                                herolist.ForEach(h =>
+                                {
+                                    var Herolocal = dbmanager.Table<HeroList>().FirstOrDefault(w => w.HeroId == h.Id_hero);
+                                    if (Herolocal == null)
+                                    {
+                                        HeroList HLog = new HeroList
+                                        {
+                                            GameId = h.Id_Game,
+                                            RoomId = h.Id_Room,
+                                            HeroId = h.Id_hero,
+                                            HeroName = h.HeroName
+                                        };
+                                        dbmanager.Insert(HLog);
+                                    }
+                                    else
+                                    {
+                                        Herolocal.GameId = h.Id_Game;
+                                        Herolocal.RoomId = h.Id_Room;
+                                        Herolocal.HeroId = h.Id_hero;
+                                        Herolocal.HeroName = h.HeroName;
+                                        dbmanager.UpdateTable(Herolocal);
+                                    }
+                                });
+                                enemylist.ForEach(e =>
+                                {
+                                    var Enemylog = dbmanager.Table<EnemyList>().FirstOrDefault(m => m.EnemyId == e.Id_enemies);
+                                    if (Enemylog == null)
+                                    {
+                                        EnemyList ELog = new EnemyList
+                                        {
+                                            EnemyId = e.Id_enemies,
+                                            GameId = e.Id_Game,
+                                            RoomId = e.Id_Room,
+                                            EnemyName = e.EnemiesName
+                                        };
+                                        dbmanager.Insert(ELog);
+                                    }
+                                    else
+                                    {
+                                        Enemylog.EnemyId = e.Id_enemies;
+                                        Enemylog.GameId = e.Id_Game;
+                                        Enemylog.RoomId = e.Id_Room;
+                                        Enemylog.EnemyName = e.EnemiesName;
+                                        dbmanager.UpdateTable(Enemylog);
+                                    }
+
+                                });
+                                attacktoollist.ForEach(t =>
+                                {
+                                    var ToolLog = dbmanager.Table<AttackToolList>().FirstOrDefault(u => u.ToolId == t.Id_attacktool);
+                                    if (ToolLog == null)
+                                    {
+                                        AttackToolList Tlog = new AttackToolList
+                                        {
+                                            GameId = t.Id_Game,
+                                            RoomId = t.Id_Room,
+                                            ToolId = t.Id_attacktool,
+                                            ToolName = t.AttacktoolName
+                                        };
+                                        dbmanager.Insert(Tlog);
+
+                                    }
+                                    else
+                                    {
+                                        ToolLog.GameId = t.Id_Game;
+                                        ToolLog.RoomId = t.Id_Room;
+                                        ToolLog.ToolId = t.Id_attacktool;
+                                        ToolLog.ToolName = t.AttacktoolName;
+                                        dbmanager.UpdateTable(ToolLog);
+                                    }
+                                });
+                            }
+                       
+                        }
+
                         LocalgameConfig.GameId = x.Id_Game;
                         LocalgameConfig.Oid = x.ID_ORGANIZATION;
                         LocalgameConfig.GameName = x.GameName;
@@ -1322,12 +1494,7 @@ public class HomePageScript : MonoBehaviour
                     yield return new WaitForSeconds(0.2f);
                     StartCoroutine(GetTexture(Anagrameimageid[a], AnagramImageUrl[a], AnagramDir));
                 }
-                yield return new WaitForSeconds(1f);
-                for (int a = 0; a < Urls.Count; a++)
-                {
-                    yield return new WaitForSeconds(0.2f);
-                    StartCoroutine(GetTexture(Ids[a], Urls[a], AvatarDir));
-                }
+               
                 yield return new WaitForSeconds(1f);
                 for (int a = 0; a < LocationUrl.Count; a++)
                 {

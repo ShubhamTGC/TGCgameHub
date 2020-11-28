@@ -39,12 +39,12 @@ public class HomePageCardSection : MonoBehaviour
     {
         startingpos = SideBar.GetComponent<RectTransform>().localPosition;
         targetPos = TargetObj.GetComponent<RectTransform>().localPosition;
+        StartCoroutine(AvatarSelection());
     }
     private void OnEnable()
     {
         StartCoroutine(GetCardImage());
         StartCoroutine(GetOverAllScore());
-        StartCoroutine(AvatarSelection());
         initialtemppos = initialPos;
         LastTempPos = lastPos;
         Appversion.text = "Version : " + Application.version;

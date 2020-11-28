@@ -14,6 +14,9 @@ public class GameSetupModel
     public List<Truckdestinationdrivinglist> truckdestinationdrivinglist { get; set; }
     public List<matchthetiletypelist> matchthetiletypelist { get; set; }
     public List<matchthetilelist> matchthetilelist { get; set; }
+    public List<attacktoollist> attacktoollist { get; set; }
+    public List<enemieslist> enemieslist { get; set; }
+    public List<herelist> herelist { get; set; }
 
 }
 
@@ -28,7 +31,6 @@ public class Gamelist
     public string completePer { get; set; }
     public string RectangleImgURL { get; set; }
     public string RoundedImgURL { get; set; }
-
     public int UpdatedFlag { get; set; }
 }
 
@@ -98,6 +100,7 @@ public class Objectgamilist
     public string item_Name { get; set; }
     public int correct_point { get; set; }
     public int Wrong_point { get; set; }
+    public int? Complete_Score { get; set; }
 }
 
 public class Truckscoretypelist
@@ -143,4 +146,32 @@ public class matchthetilelist
 
 }
 
+public class attacktoollist
+{
+    public int Id_attacktool { get; set; }
+    public int Id_Game { get; set; }
+    public int Id_Room { get; set; }
+    public string AttacktoolName { get; set; }
+    public string IsActive { get; set; }
+    public DateTime Updated_Date_Time { get; set; }
+}
 
+public class enemieslist
+{
+    public int Id_enemies { get; set; }
+    public int Id_Game { get; set; }
+    public int Id_Room { get; set; }
+    public string EnemiesName { get; set; }
+    public string IsActive { get; set; }
+    public DateTime Updated_Date_Time { get; set; }
+}
+
+public class herelist
+{
+    public int Id_hero { get; set; }
+    public int Id_Game { get; set; }
+    public int Id_Room { get; set; }
+    public string HeroName { get; set; }
+    public string IsActive { get; set; }
+    public DateTime Updated_Date_Time { get; set; }
+}

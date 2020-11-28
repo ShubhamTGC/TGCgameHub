@@ -38,6 +38,8 @@ public class Generationlevel : MonoBehaviour
 
     public SimpleSQLManager dbmanager;
     private AudioSource audioSource;
+    public GameObject Loadingbar;
+    public CustomLoader Loader;
     private void Awake()
     {
         audioSource = Camera.main.gameObject.GetComponent<AudioSource>();
@@ -69,8 +71,8 @@ public class Generationlevel : MonoBehaviour
     }
      void OnEnable()
     {
+        Loadingbar.SetActive(true);
         StartCoroutine(AvatarfaceSprites());
-        GameguidePage.SetActive(true);
     }
   
 
@@ -294,6 +296,8 @@ public class Generationlevel : MonoBehaviour
             Sprite avatar = GetAvatarSprite(file, spritename);
             GameLb.AvatarModel.Add(avatar);
         }
+        Loader.Isdone = true;
+        GameguidePage.SetActive(true);
 
     }
 
