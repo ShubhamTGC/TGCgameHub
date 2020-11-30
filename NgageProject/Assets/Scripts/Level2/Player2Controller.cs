@@ -23,7 +23,7 @@ public class Player2Controller : MonoBehaviour
     private bool canMove;
 
     public int currentScore = 0;
-    public TextMeshProUGUI scoreText;
+    public Text scoreText;
 
     public int lives;
     public List<Image> heartList;
@@ -215,7 +215,7 @@ public class Player2Controller : MonoBehaviour
             }
             if (lives == 1)
             {
-                gameOverCount[1].text = currentScore.ToString();
+                //gameOverCount[1].text = currentScore.ToString();
                 spawn2Manager.gameOver(false);
                 //spawnManager.gameOver(false); //game will over if player run out of lives
                 return;
@@ -228,6 +228,7 @@ public class Player2Controller : MonoBehaviour
 
             StopCoroutine("popUp");
             StopCoroutine("enemyHit");
+            minusText.GetComponent<Text>().text = "+" + wrong_Point;
             popupText.gameObject.SetActive(false);
             minusText.gameObject.SetActive(false);
             StartCoroutine("enemyHit");
@@ -269,13 +270,14 @@ public class Player2Controller : MonoBehaviour
             collision.gameObject.SetActive(false);
             if (currentScore >= completeScore)
             {
-                gameOverCount[0].text = currentScore.ToString();
+                //gameOverCount[0].text = currentScore.ToString();
                 spawn2Manager.gameOver(true);
             }
 
 
             StopCoroutine("popUp");
             StopCoroutine("enemyHit");
+            popupText.GetComponent<Text>().text = "+" + correct_Point;
             popupText.gameObject.SetActive(false);
             minusText.gameObject.SetActive(false);
             StartCoroutine("popUp");

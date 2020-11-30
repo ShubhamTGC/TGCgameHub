@@ -19,5 +19,6 @@ public class MainUrls
     public static string MatchTheTilepostApi = "matchthetilegamedetailuserlog";
     public static string AppVersionApi = "GetVersion";
     public static string GetPercentileApi = "GetPercentilesList";
+    public static string PostShootnRunApi = "shootandrundetailsuserlog";
 
 }

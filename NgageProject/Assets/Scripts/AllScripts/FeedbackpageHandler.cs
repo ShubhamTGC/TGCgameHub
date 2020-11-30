@@ -102,33 +102,33 @@ public class FeedbackpageHandler : MonoBehaviour
     {
         if (Application.platform == RuntimePlatform.Android)
         {
-            NativeGallery.Permission permission = NativeGallery.GetImageFromGallery((path) => {
+            //NativeGallery.Permission permission = NativeGallery.GetImageFromGallery((path) => {
 
-                if (path != null)
-                {
-                    selectedImgPath = path;
-                    Texture2D texture = NativeGallery.LoadImageAtPath(path, 1024, false);
-                    if (texture != null)
-                    {
-                        byte[] bytes;
-                        texture.name = "test.png";
-                        test = texture;
-                        tex = texture;
-                        bytes = tex.EncodeToPNG();
-                        post_image_byte.Add(bytes);
-                        Sprite ImageSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                        GameObject gb = Instantiate(ImagePreview, PreviewHandler, true);
-                        gb.GetComponent<Image>().sprite = ImageSprite;
-                        gb.name = "preview";
-                        gb.SetActive(true);
-                        gb.GetComponent<ShowimagePreview>().PreviewTexture = texture;
-                        gb.GetComponent<ShowimagePreview>().canvas = this.gameObject.transform;
-                        TextForImage.SetActive(false);
-                    }
-                }
+            //    if (path != null)
+            //    {
+            //        selectedImgPath = path;
+            //        Texture2D texture = NativeGallery.LoadImageAtPath(path, 1024, false);
+            //        if (texture != null)
+            //        {
+            //            byte[] bytes;
+            //            texture.name = "test.png";
+            //            test = texture;
+            //            tex = texture;
+            //            bytes = tex.EncodeToPNG();
+            //            post_image_byte.Add(bytes);
+            //            Sprite ImageSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            //            GameObject gb = Instantiate(ImagePreview, PreviewHandler, true);
+            //            gb.GetComponent<Image>().sprite = ImageSprite;
+            //            gb.name = "preview";
+            //            gb.SetActive(true);
+            //            gb.GetComponent<ShowimagePreview>().PreviewTexture = texture;
+            //            gb.GetComponent<ShowimagePreview>().canvas = this.gameObject.transform;
+            //            TextForImage.SetActive(false);
+            //        }
+            //    }
 
 
-            }, "Select Your Image", "image/jpeg");
+            //}, "Select Your Image", "image/jpeg");
         }
         else
         {

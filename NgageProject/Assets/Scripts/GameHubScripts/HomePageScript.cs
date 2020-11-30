@@ -54,6 +54,7 @@ public class HomePageScript : MonoBehaviour
     public GameObject LogOutpage;
     public GameObject AppupdatePage;
     private bool GoogleLogin;
+    public GameObject ExitButton;
 
     public void Awake()
     {
@@ -347,6 +348,7 @@ public class HomePageScript : MonoBehaviour
 
     IEnumerator OpenSelectedScene(int Scene)
     {
+        PlayerPrefs.SetString("From", "Main");
         iTween.ScaleTo(GameSelectionpage, Vector3.zero, 0.4f);
         yield return new WaitForSeconds(0.5f);
         GameSelectionpage.SetActive(false);
@@ -428,6 +430,7 @@ public class HomePageScript : MonoBehaviour
                             PlayerPrefs.SetInt("UID", LoginLog.Id_User);
                             PlayerPrefs.SetInt("OID", LoginLog.ID_ORGANIZATION);
                             string msg = "Logged in Successfully!!!";
+                            ExitButton.SetActive(false);
                             StartCoroutine(ShowPopUp(msg,happy));
                             int avatarid =Convert.ToInt32(LoginLog.Id_Avatar != null ? LoginLog.Id_Avatar : 0);
                             if(rememberMe.isOn == true)
@@ -465,7 +468,7 @@ public class HomePageScript : MonoBehaviour
 
                             }
                             
-                            yield return new WaitForSeconds(3.5f);
+                            yield return new WaitForSeconds(3f);
                             DownloadDone = false;
                             Loadingpage.SetActive(true);
                             StartCoroutine(GetGameDetailsProcess());
@@ -561,6 +564,7 @@ public class HomePageScript : MonoBehaviour
                             PlayerPrefs.SetString("Loggedin", "true");
                             string msg = "Logged in Successfully!!!";
                             GoogleLogin = true;
+                            ExitButton.SetActive(false);
                             StartCoroutine(ShowPopUp(msg,happy));
                             var localLog = dbmanager.Table<ProfileSetup>().FirstOrDefault();
                             if(localLog == null)
@@ -592,7 +596,9 @@ public class HomePageScript : MonoBehaviour
 
                             }
 
-                            yield return new WaitForSeconds(3.5f);
+                            yield return new WaitForSeconds(3f);
+                            DownloadDone = false;
+                            Loadingpage.SetActive(true);
                             StartCoroutine(GetGameDetailsProcess());
                             
                             

@@ -64,6 +64,8 @@ public class GameLeaderBoardScript : MonoBehaviour
                         gb.transform.GetChild(1).gameObject.transform.GetChild(1).gameObject.GetComponent<Text>().text = x.Name;
                         gb.transform.GetChild(1).gameObject.transform.GetChild(2).gameObject.GetComponent<Text>().text = x.score.ToString();
                     }
+
+
                     index++;
                 });
             }

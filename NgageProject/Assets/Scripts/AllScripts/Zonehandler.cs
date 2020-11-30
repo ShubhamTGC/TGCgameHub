@@ -113,18 +113,18 @@ public class Zonehandler : MonoBehaviour
     // private int Room_oneId,Room_twoId,Room_thirdId;
 
     //========================== CMS CONFIGURABLE SCORE OF OBJECTS ======================================
-    [HideInInspector] public List<string> CMsobjectRoom1 = new List<string>();
-    [HideInInspector] public List<string> CMsobjectRoom2 = new List<string>();
-    [HideInInspector] public List<string> CMsobjectRoom3 = new List<string>();
-    [HideInInspector] public List<int> CmsObjectId1 = new List<int>();
-    [HideInInspector] public List<int> CmsObjectId2 = new List<int>();
-    [HideInInspector] public List<int> CmsObjectId3 = new List<int>();
-    [HideInInspector] public List<int> CMsObjectCscore1 = new List<int>();
-    [HideInInspector] public List<int> CMsObjectCscore2 = new List<int>();
-    [HideInInspector] public List<int> CMsObjectCscore3 = new List<int>();
-    [HideInInspector] public List<int> CMsObjectPCscore1 = new List<int>();
-    [HideInInspector] public List<int> CMsObjectPCscore2 = new List<int>();
-    [HideInInspector] public List<int> CMsObjectPCscore3 = new List<int>();
+   public List<string> CMsobjectRoom1 = new List<string>();
+   public List<string> CMsobjectRoom2 = new List<string>();
+   public List<string> CMsobjectRoom3 = new List<string>();
+   public List<int> CmsObjectId1 = new List<int>();
+   public List<int> CmsObjectId2 = new List<int>();
+   public List<int> CmsObjectId3 = new List<int>();
+   public List<int> CMsObjectCscore1 = new List<int>();
+   public List<int> CMsObjectCscore2 = new List<int>();
+   public List<int> CMsObjectCscore3 = new List<int>();
+   public List<int> CMsObjectPCscore1 = new List<int>();
+   public List<int> CMsObjectPCscore2 = new List<int>();
+   public List<int> CMsObjectPCscore3 = new List<int>();
 
     public List<string> CurrentItemList = new List<string>();
     public List<int> CurrentPCscore = new List<int>();
@@ -251,43 +251,43 @@ public class Zonehandler : MonoBehaviour
         }
         yield return new WaitForSeconds(0.1f);
         var wasteCollection = dbmanager.Table<ObjectGameList>().ToList();
-        for (int a = 0; a < RoomIds.Count; a++)
-        {
-            if (a == 0)
-            {
-                var roomidLog = wasteCollection.Where(x => x.RoomId == RoomIds[0]).Select(y => y.ItemName.Trim()).ToList();
-                var RoomPcscore = wasteCollection.Where(x => x.RoomId == RoomIds[0]).Select(y => y.WrongPoint).ToList();
-                var RoomCscore = wasteCollection.Where(x => x.RoomId == RoomIds[0]).Select(y => y.CorrectPoint).ToList();
-                var Objectid = wasteCollection.Where(x => x.RoomId == RoomIds[0]).Select(y => y.ItemId).ToList();
-                CMsobjectRoom1 = roomidLog;
-                CMsObjectPCscore1 = RoomPcscore;
-                CMsObjectCscore1 = RoomCscore;
-                CmsObjectId1 = Objectid;
+        //for (int a = 0; a < RoomIds.Count; a++)
+        //{
+        //    if (a == 0)
+        //    {
+        //        var roomidLog = wasteCollection.Where(x => x.RoomId == RoomIds[0]).Select(y => y.ItemName.Trim()).ToList();
+        //        var RoomPcscore = wasteCollection.Where(x => x.RoomId == RoomIds[0]).Select(y => y.WrongPoint).ToList();
+        //        var RoomCscore = wasteCollection.Where(x => x.RoomId == RoomIds[0]).Select(y => y.CorrectPoint).ToList();
+        //        var Objectid = wasteCollection.Where(x => x.RoomId == RoomIds[0]).Select(y => y.ItemId).ToList();
+        //        CMsobjectRoom1 = roomidLog;
+        //        CMsObjectPCscore1 = RoomPcscore;
+        //        CMsObjectCscore1 = RoomCscore;
+        //        CmsObjectId1 = Objectid;
 
-            }
-            if (a == 1)
-            {
-                var roomidLog = wasteCollection.Where(x => x.RoomId == RoomIds[1]).Select(y => y.ItemName.Trim()).ToList();
-                var RoomPcscore = wasteCollection.Where(x => x.RoomId == RoomIds[1]).Select(y => y.WrongPoint).ToList();
-                var RoomCscore = wasteCollection.Where(x => x.RoomId == RoomIds[1]).Select(y => y.CorrectPoint).ToList();
-                var Objectid = wasteCollection.Where(x => x.RoomId == RoomIds[1]).Select(y => y.ItemId).ToList();
-                CMsobjectRoom2 = roomidLog;
-                CMsObjectPCscore2 = RoomPcscore;
-                CMsObjectCscore2 = RoomCscore;
-                CmsObjectId2 = Objectid;
-            }
-            if (a == 2)
-            {
-                var roomidLog = wasteCollection.Where(x => x.RoomId == RoomIds[2]).Select(y => y.ItemName.Trim()).ToList();
-                var RoomPcscore = wasteCollection.Where(x => x.RoomId == RoomIds[2]).Select(y => y.WrongPoint).ToList();
-                var RoomCscore = wasteCollection.Where(x => x.RoomId == RoomIds[2]).Select(y => y.CorrectPoint).ToList();
-                var Objectid = wasteCollection.Where(x => x.RoomId == RoomIds[2]).Select(y => y.ItemId).ToList();
-                CMsobjectRoom3 = roomidLog;
-                CMsObjectPCscore3 = RoomPcscore;
-                CMsObjectCscore3 = RoomCscore;
-                CmsObjectId3 = Objectid;
-            }
-        }
+        //    }
+        //    if (a == 1)
+        //    {
+        //        var roomidLog = wasteCollection.Where(x => x.RoomId == RoomIds[1]).Select(y => y.ItemName.Trim()).ToList();
+        //        var RoomPcscore = wasteCollection.Where(x => x.RoomId == RoomIds[1]).Select(y => y.WrongPoint).ToList();
+        //        var RoomCscore = wasteCollection.Where(x => x.RoomId == RoomIds[1]).Select(y => y.CorrectPoint).ToList();
+        //        var Objectid = wasteCollection.Where(x => x.RoomId == RoomIds[1]).Select(y => y.ItemId).ToList();
+        //        CMsobjectRoom2 = roomidLog;
+        //        CMsObjectPCscore2 = RoomPcscore;
+        //        CMsObjectCscore2 = RoomCscore;
+        //        CmsObjectId2 = Objectid;
+        //    }
+        //    if (a == 2)
+        //    {
+        //        var roomidLog = wasteCollection.Where(x => x.RoomId == RoomIds[2]).Select(y => y.ItemName.Trim()).ToList();
+        //        var RoomPcscore = wasteCollection.Where(x => x.RoomId == RoomIds[2]).Select(y => y.WrongPoint).ToList();
+        //        var RoomCscore = wasteCollection.Where(x => x.RoomId == RoomIds[2]).Select(y => y.CorrectPoint).ToList();
+        //        var Objectid = wasteCollection.Where(x => x.RoomId == RoomIds[2]).Select(y => y.ItemId).ToList();
+        //        CMsobjectRoom3 = roomidLog;
+        //        CMsObjectPCscore3 = RoomPcscore;
+        //        CMsObjectCscore3 = RoomCscore;
+        //        CmsObjectId3 = Objectid;
+        //    }
+        //}
         StartCoroutine(GetGameAttemptNoTask());
     }
 

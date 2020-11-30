@@ -39,17 +39,17 @@ public class Fileselection : MonoBehaviour
         }
         if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            NativeCamera.Permission permission = NativeCamera.TakePicture((path) =>
-            {
-                if (path != null)
-                {
-                    SelectedBtn = preview_btn;
-                    Texture2D tex = NativeCamera.LoadImageAtPath(path, 1024, false);
-                    byte[] image_data = tex.EncodeToPNG();
-                    StartCoroutine(SaveImageToServer.instance.show_image_mathod(WriteByte(image_data), SelectedBtn));
+            //NativeCamera.Permission permission = NativeCamera.TakePicture((path) =>
+            //{
+            //    if (path != null)
+            //    {
+            //        SelectedBtn = preview_btn;
+            //        Texture2D tex = NativeCamera.LoadImageAtPath(path, 1024, false);
+            //        byte[] image_data = tex.EncodeToPNG();
+            //        StartCoroutine(SaveImageToServer.instance.show_image_mathod(WriteByte(image_data), SelectedBtn));
 
-                }
-            }, 1024);
+            //    }
+            //}, 1024);
         }
 
     }

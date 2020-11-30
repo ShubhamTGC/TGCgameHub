@@ -94,34 +94,34 @@ public class CameraManager : MonoBehaviour
         SelectedBtn = PIcObject;
         if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            NativeCamera.Permission permission = NativeCamera.TakePicture((path) =>
-            {
+            //NativeCamera.Permission permission = NativeCamera.TakePicture((path) =>
+            //{
 
-                if (path != null)
-                {
-                    Texture2D tex = NativeCamera.LoadImageAtPath(path, 1024);
-                    if (tex == null)
-                    {
-                        return;
-                    }
-                    byte[] image_data = File.ReadAllBytes(path);
-                    if (image_data != null)
-                    {
-                        //imagedata.text = " image found ";
-                        StartCoroutine(SaveImageToServer.instance.show_image_mathod(WriteByte(image_data), SelectedBtn));
-                    }
-                    else
-                    {
-                        Debug.Log("image data null ");
-                        //imagedata.text = " image data null";
-                    }
+            //    if (path != null)
+            //    {
+            //        Texture2D tex = NativeCamera.LoadImageAtPath(path, 1024);
+            //        if (tex == null)
+            //        {
+            //            return;
+            //        }
+            //        byte[] image_data = File.ReadAllBytes(path);
+            //        if (image_data != null)
+            //        {
+            //            //imagedata.text = " image found ";
+            //            StartCoroutine(SaveImageToServer.instance.show_image_mathod(WriteByte(image_data), SelectedBtn));
+            //        }
+            //        else
+            //        {
+            //            Debug.Log("image data null ");
+            //            //imagedata.text = " image data null";
+            //        }
 
-                    //preview_btn.GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
-                    //CapturedImage.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
-                }
+            //        //preview_btn.GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+            //        //CapturedImage.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+            //    }
 
 
-            });
+            //});
         }
     }
 

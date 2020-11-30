@@ -61,10 +61,10 @@ public class HomePageCardSection : MonoBehaviour
             x.transform.GetChild(2).gameObject.SetActive(true);
         });
         var gameName = dbmanager.Table<GameListDetails>().Select(b => b.GameName).ToList();
-        for(int c = 0; c < gameName.Count; c++)
-        {
-            Gamenames[c].text = gameName[c].ToUpperInvariant();
-        }
+        //for(int c = 0; c < gameName.Count; c++)
+        //{
+        //    Gamenames[c].text = gameName[c].ToUpperInvariant();
+        //}
         var LocalLog = dbmanager.Table<GameListDetails>().Select(x=>x.RectImageUrl).ToList();
         
         for(int a = 0; a < LocalLog.Count; a++)
@@ -248,5 +248,11 @@ public class HomePageCardSection : MonoBehaviour
         iTween.ScaleTo(RewardPage, Vector3.zero, 0.4f);
         yield return new WaitForSeconds(0.5f);
         RewardPage.SetActive(false);
+    }
+
+    public void Information()
+    {
+        ShowSideCard();
+        Application.OpenURL("https://www.thegamificationcompany.com/");
     }
 }

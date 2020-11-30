@@ -134,26 +134,26 @@ public class GameFeedPage : MonoBehaviour
        
         if (Application.platform == RuntimePlatform.Android)
         {
-            NativeGallery.Permission permission = NativeGallery.GetImageFromGallery((path) => {
+            //NativeGallery.Permission permission = NativeGallery.GetImageFromGallery((path) => {
 
-                if (path != null)
-                {
-                    selectedImgPath = path;
-                    Texture2D texture = NativeGallery.LoadImageAtPath(path,1024,false);
-                    if (texture != null)
-                    {
-                       // imageBytes = texture.EncodeToPNG();
-                        texture.name = "test.png";
-                        test = texture;
-                        tex = texture;
-                        Sprite ImageSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                        SelectImgPreview.sprite = ImageSprite;
-                        PreviewPage.SetActive(true);
-                    }
-                }
+            //    if (path != null)
+            //    {
+            //        selectedImgPath = path;
+            //        Texture2D texture = NativeGallery.LoadImageAtPath(path,1024,false);
+            //        if (texture != null)
+            //        {
+            //           // imageBytes = texture.EncodeToPNG();
+            //            texture.name = "test.png";
+            //            test = texture;
+            //            tex = texture;
+            //            Sprite ImageSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            //            SelectImgPreview.sprite = ImageSprite;
+            //            PreviewPage.SetActive(true);
+            //        }
+            //    }
 
 
-            }, "Select Your Image", "image/jpeg");
+            //}, "Select Your Image", "image/jpeg");
         }
         
         

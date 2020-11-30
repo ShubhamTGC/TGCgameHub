@@ -63,7 +63,7 @@ public class ThrowWasteHandler : MonoBehaviour
     private int TotalGameScore;
     private bool checkScore;
     private float Knobangle;
-    private bool TimePaused = false;
+    [HideInInspector]public bool TimePaused = false;
     [SerializeField]
     private Color WrongEffect;
 
@@ -159,13 +159,13 @@ public class ThrowWasteHandler : MonoBehaviour
         RowsLevel1 = new List<GameObject>();
         RowsLevel2 = new List<GameObject>();
         gameclose = true;
-        closepause.onClick.RemoveAllListeners();
-        closepause.onClick.AddListener(delegate { ClosePuasepage(); });
-        HomeBtn.onClick.RemoveAllListeners();
-        HomeBtn.onClick.AddListener(delegate { GotoHome(); });
-        restartBtn.onClick.RemoveAllListeners();
-        restartBtn.onClick.AddListener(delegate { ClosePuasepage(); });
-        closeButton.onClick.RemoveAllListeners();
+        //closepause.onClick.RemoveAllListeners();
+        //closepause.onClick.AddListener(delegate { ClosePuasepage(); });
+        //HomeBtn.onClick.RemoveAllListeners();
+        //HomeBtn.onClick.AddListener(delegate { GotoHome(); });
+        //restartBtn.onClick.RemoveAllListeners();
+        //restartBtn.onClick.AddListener(delegate { ClosePuasepage(); });
+        //closeButton.onClick.RemoveAllListeners();
         closeButton.onClick.AddListener(delegate { CloseGame(); });
         Gamecanvas.SetActive(true);
        

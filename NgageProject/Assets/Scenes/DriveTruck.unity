@@ -2824,7 +2824,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Covid Pacman - Game guide
+  m_Text: Health point - Game guide
 --- !u!222 &260935508
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4183,8 +4183,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 262, y: -130}
-  m_SizeDelta: {x: 250, y: 100}
+  m_AnchoredPosition: {x: 340, y: -130}
+  m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &368301480
 MonoBehaviour:
@@ -4366,7 +4366,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8575d12bbf6f7874a90096a6088424eb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bb225c8ac7b2dc942ba41caa27e208f4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8316,7 +8316,7 @@ MonoBehaviour:
   - {fileID: 2107404165}
   - {fileID: 72236818}
   AvatarModel: []
-  currentgameId: 2
+  currentgameId: 5
 --- !u!114 &787260157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10888,7 +10888,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Game
+  m_Text: Health point
 --- !u!222 &1097453698
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -6,6 +6,8 @@ using System;
 using m2ostnextservice.Models;
 using Newtonsoft;
 using UnityEngine.Networking;
+using SimpleSQL;
+using System.Linq;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -13,7 +15,7 @@ public class SpawnManager : MonoBehaviour
     private int roomID = 6;
 
     private PlayerController player;
-
+    public GameObject PlayerAvatar;
     public GameObject levelPart_prefab; //level part prefab
     public GameObject firstPart; //the current level part in which the game start
 
@@ -37,13 +39,17 @@ public class SpawnManager : MonoBehaviour
 
     public int attemptNo;
     private string gameStatus;
-
+    public SimpleSQLManager dbmanager;
+    [SerializeField] private int GameId;
+    [HideInInspector] public int RoomId;
     /// <summary>
     /// API
     /// </summary>
-    private const string postApiURL = "http://140.238.249.68/TGCGame/api/shootandrundetailsuserlog";
+   
 
     private const string getAttemptURL = "http://140.238.249.68/TGCGame/api/getattemptNo";
+
+    public GameObject PausePage, Leaderboard;
 
     //?UID=1&GID=1&RID=2
 
@@ -55,13 +61,14 @@ public class SpawnManager : MonoBehaviour
 
     private void OnEnable()
     {
-        if (repeat)
-        {
-            player.completeScore = completeScore;
-            player.correct_Point = correct_point;
-            player.wrong_Point = wrong_point;
-        }
+        //if (repeat)
+        //{
+        //    player.completeScore = completeScore;
+        //    player.correct_Point = correct_point;
+        //    player.wrong_Point = wrong_point;
+        //}
 
+      
         StartCoroutine(getAttemptNo());
         
     }
@@ -69,20 +76,12 @@ public class SpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-        objectList = gameManager.objects;
-
-        for (int i = 0; i < objectList.Count; i++)
-        {
-            if (objectList[i].Id_Room == roomID)
-            {
-                index = i;
-            }
-        }
-
-        completeScore = gameManager.objects[index].Complete_Score;
-        correct_point = gameManager.objects[index].correct_point;
-        wrong_point = gameManager.objects[index].Wrong_point;
+        var LocalLog = dbmanager.Table<ObjectGameList>().Where(x => x.GameId == GameId).Select(y => y.RoomId).ToList();
+        RoomId = LocalLog[0];
+        completeScore = dbmanager.Table<ObjectGameList>().FirstOrDefault(a => a.RoomId == RoomId).CompletionScore;
+        correct_point = dbmanager.Table<ObjectGameList>().FirstOrDefault(a => a.RoomId == RoomId).CorrectPoint;
+        wrong_point = dbmanager.Table<ObjectGameList>().FirstOrDefault(a => a.RoomId == RoomId).WrongPoint;
+ 
 
         instant = this;
         pooledLevelParts = new List<GameObject>();
@@ -151,23 +150,25 @@ public class SpawnManager : MonoBehaviour
     public void gameOver(bool status)
     {
         player.isGamePaused = true;
-        Time.timeScale = 0;
-
+        //Time.timeScale = 0;
+        PlayerAvatar.SetActive(false);
+        StartCoroutine(PostData());
+        StartCoroutine(PostMasterLog());
         if(status == false)
         {
-            gameStatus = "not_completed";
+            //gameStatus = "not_completed";
             died.gameObject.SetActive(true);
         }
         else
         {
-            gameStatus = "completed";
+            //gameStatus = "completed";
             scored.gameObject.SetActive(true);
         }
     }
 
     public void exitGame()
     {
-        StartCoroutine(PostData(false));
+        //StartCoroutine(PostData(false));
     }
 
     public void replayGame()
@@ -183,7 +184,7 @@ public class SpawnManager : MonoBehaviour
         {
             gameManager.isReplaying[i] = false;
         }
-        StartCoroutine(PostData(true));
+        //StartCoroutine(PostData(true));
         
     }
 
@@ -195,8 +196,7 @@ public class SpawnManager : MonoBehaviour
     IEnumerator getAttemptNo()
     {
         AESAlgorithm AES = new AESAlgorithm();
-        string cred = "?UID=" + gameManager.ID_USER.ToString() + "&GID=7&RID=6";
-        string hittingURL = $"{getAttemptURL}{cred}";
+        string hittingURL = $"{MainUrls.BaseUrl}{MainUrls.GetAttemopNo}?UID={PlayerPrefs.GetInt("UID")}&GID={GameId}&RID={RoomId}";
         WWW Request = new WWW(hittingURL);
         yield return Request;
         if (Request.text != null)
@@ -207,27 +207,22 @@ public class SpawnManager : MonoBehaviour
                 string Log = AES.getDecryptedString(CompleteLog);
                 AttemptNoModel model = Newtonsoft.Json.JsonConvert.DeserializeObject<AttemptNoModel>(Log);
                 attemptNo = Convert.ToInt32(model.Master_AttemptNo);
-                if (gameManager.isReplaying[0])
-                {
-                    attemptNo++;
-                }
-                //Debug.Log(attemptNo);
             }
         }
     }
 
-    IEnumerator PostData(bool stat)
+    IEnumerator PostData()
     {
         yield return null;
-        string hittingURL = $"{postApiURL}";
+        string hittingURL = $"{MainUrls.BaseUrl}{MainUrls.PostShootnRunApi}";
         PostModel postmodel = new PostModel
         {
             score = player.currentScore,
-            status = gameStatus,
+            status = "a",
             updated_date_time = DateTime.Now,
-            id_user = gameManager.ID_USER,
-            Id_Game = 7,
-            Id_Room = roomID,
+            id_user = PlayerPrefs.GetInt("UID"),
+            Id_Game = GameId,
+            Id_Room = RoomId,
             Killed_Enemies = player.enemiesKilled,
             Life_count = player.lives,
             attempt_no = attemptNo + 1
@@ -263,15 +258,108 @@ public class SpawnManager : MonoBehaviour
             }
         }
 
-        if (stat)
-        {
-            SceneManager.LoadScene(0);
-        }
-        else
-        {
-            Application.Quit();
-        }
 
+    }
+
+    IEnumerator PostMasterLog()
+    {
+        yield return new WaitForSeconds(0.1f);
+        string HittingUrl = $"{MainUrls.BaseUrl}{MainUrls.MasterLogApi}";
+        NgageMasterPostLog PostField = new NgageMasterPostLog()
+        {
+            id_user = PlayerPrefs.GetInt("UID"),
+            ID_ORGANIZATION = PlayerPrefs.GetInt("OID"),
+            score = player.currentScore,
+            attempt_no = attemptNo + 1,
+            timetaken_to_complete = "00:00",
+            is_completed = 1,
+            game_type = 1,
+            Id_Game = GameId
+        };
+
+        AESAlgorithm aes = new AESAlgorithm();
+        string PostLog = Newtonsoft.Json.JsonConvert.SerializeObject(PostField);
+
+        string EncryptedData = aes.getEncryptedString(PostLog);
+        CommonModel model = new CommonModel()
+        {
+            Data = EncryptedData
+        };
+
+        string finaldata = Newtonsoft.Json.JsonConvert.SerializeObject(model);
+        Debug.Log("master data log " + finaldata);
+        using (UnityWebRequest Request = UnityWebRequest.Put(HittingUrl, finaldata))
+        {
+            Request.method = UnityWebRequest.kHttpVerbPOST;
+            Request.SetRequestHeader("Content-Type", "application/json");
+            Request.SetRequestHeader("Accept", "application/json");
+            yield return Request.SendWebRequest();
+            if (!Request.isNetworkError && !Request.isHttpError)
+            {
+                Debug.Log(Request.downloadHandler.text);
+
+            }
+            else
+            {
+                Debug.Log("Error " + Request.downloadHandler.text);
+            }
+
+        }
+    }
+
+    public void GotoHome()
+    {
+        Time.timeScale = 1f;
+        PlayerPrefs.SetString("From", "level");
+        StartCoroutine(Hometask());
+    }
+    IEnumerator Hometask()
+    {
+        iTween.ScaleTo(PausePage, Vector3.zero, 0.4f);
+        yield return new WaitForSeconds(0.5f);
+        PausePage.SetActive(false);
+        SceneManager.LoadScene(7);
+
+    }
+
+    public void BackAction()
+    {
+        StartCoroutine(PauseTask());
+    }
+
+    IEnumerator PauseTask()
+    {
+        PausePage.SetActive(true);
+        yield return new WaitForSeconds(0.4f);
+        Time.timeScale = 0f;
+    }
+
+    public void ClosePausepage()
+    {
+        Time.timeScale = 1f;
+        StartCoroutine(CloserOfPausePage());
+    }
+
+    IEnumerator CloserOfPausePage()
+    {
+        iTween.ScaleTo(PausePage, Vector3.zero, 0.4f);
+        yield return new WaitForSeconds(0.5f);
+        PausePage.SetActive(false);
+       
+    }
+    
+    public void OkDonePage(GameObject Panel)
+    {
+        Time.timeScale = 1f;
+        player.gameObject.SetActive(false);
+        Panel.SetActive(false);
+        Leaderboard.SetActive(true);
+    }
+
+    public void BacktoHomepage()
+    {
+        PlayerPrefs.SetString("From", "level");
+        SceneManager.LoadScene(7);
     }
 
 

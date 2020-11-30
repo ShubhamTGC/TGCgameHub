@@ -72,6 +72,7 @@ public class Stage2ZoneHandler : MonoBehaviour
     public GameObject LeaderBoardPage;
     public GameObject popUpPage;
     public Transform Level1objecthandler, Level2Objecthandler;
+     
     void Start()
     {
         
@@ -414,6 +415,7 @@ public class Stage2ZoneHandler : MonoBehaviour
 
     public void GotoHome()
     {
+        Time.timeScale = 1f;
         int index = 0;
         Destroy(homeinstance);
         StartCoroutine(Hometask(index));
@@ -460,6 +462,7 @@ public class Stage2ZoneHandler : MonoBehaviour
                 Level2Objecthandler.GetChild(b).gameObject.GetComponent<CircleCollider2D>().enabled = true;
             }
         }
+        Level1Controller.TimePaused = false;
 
     }
 
@@ -486,6 +489,7 @@ public class Stage2ZoneHandler : MonoBehaviour
 
     IEnumerator BackToHomeMethod()
     {
+        Level1Controller.TimePaused = true;
         popUpPage.SetActive(true);
         yield return new WaitForSeconds(0.4f);
         Time.timeScale = 0f;

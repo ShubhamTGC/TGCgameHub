@@ -13736,7 +13736,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Game
+  m_Text: Barmony
 --- !u!222 &954245610
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17438,7 +17438,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Let's drink - Game guide
+  m_Text: Barmony - Game guide
 --- !u!222 &1201462703
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17660,7 +17660,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8575d12bbf6f7874a90096a6088424eb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bb225c8ac7b2dc942ba41caa27e208f4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -28743,8 +28743,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 262, y: -130}
-  m_SizeDelta: {x: 250, y: 100}
+  m_AnchoredPosition: {x: 340, y: -130}
+  m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1951122182
 MonoBehaviour:
@@ -28753,7 +28753,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1951122180}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -31373,18 +31373,48 @@ MonoBehaviour:
   BonusScoreFiller: {fileID: 0}
   TotalBonusGameScore: 90
   CollectedBonusScore: {fileID: 0}
-  CMsobjectRoom1: []
-  CMsobjectRoom2: []
-  CMsobjectRoom3: []
-  CmsObjectId1: 
-  CmsObjectId2: 
-  CmsObjectId3: 
-  CMsObjectCscore1: 
-  CMsObjectCscore2: 
-  CMsObjectCscore3: 
-  CMsObjectPCscore1: 
-  CMsObjectPCscore2: 
-  CMsObjectPCscore3: 
+  CMsobjectRoom1:
+  - Vievite
+  - Sonoma cutrer
+  - York vineyards
+  - vallonne vineyards
+  - radius merlot
+  - Whispering angel
+  - Lucien albrecht
+  - cabarnet sauvignon
+  - Magnum
+  - sula vineyards
+  CMsobjectRoom2:
+  - Ridgemont
+  - Four Rose
+  - GlenDronach
+  - Basil Haydens
+  - Ardbeg
+  - Balltines
+  - WildTurkey
+  - Redemption
+  - Themacallan
+  - jameson irish
+  CMsobjectRoom3:
+  - Guinnes
+  - Carling
+  - Speckled
+  - Pasieka
+  - Shramms
+  - Fosters
+  - Newscastle
+  - MonksStout
+  - Carlsbergs
+  - Imperial
+  CmsObjectId1: 04000000030000003b0000000500000002000000060000000700000001000000080000003c000000
+  CmsObjectId2: 090000000a0000000b0000000c0000000d0000000e0000000f000000100000003d0000003e000000
+  CmsObjectId3: 3f000000140000001300000016000000170000001500000018000000110000001200000040000000
+  CMsObjectCscore1: 0a0000000a0000000a0000000a0000000a0000000a0000000a0000000a0000000a0000000a000000
+  CMsObjectCscore2: 0a0000000a0000000a0000000a0000000a0000000a0000000a0000000a0000000a0000000a000000
+  CMsObjectCscore3: 0a0000000a0000000a0000000a0000000a0000000a0000000a0000000a0000000a0000000a000000
+  CMsObjectPCscore1: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  CMsObjectPCscore2: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  CMsObjectPCscore3: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
   CurrentItemList: []
   CurrentPCscore: 
   CurrentCscore: 
@@ -31415,33 +31445,33 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 298089837a4d039438c38b5cb6618254, type: 3}
   - {fileID: 21300000, guid: ff9dc0dfdc3d8b3468b338e9f6f7e24a, type: 3}
   Ale:
-  - Doombar
-  - moonlight
+  - Newscastle
   - Speckled
   Lager:
   - carling
   - fosters
+  - Carlsbergs
   Mead:
   - pasieka
   - shramms
-  - the monte
   Stout:
-  - guinnes
-  - imperial
+  - Guinnes
+  - Imperial
+  - MonksStout
   Bourbon:
   - Ridgemont
   - Four rose
-  - Michters
+  - WildTurkey
   Rye:
   - Basil Haydens
-  - jack daniels
+  - Redemption
   Scotch:
   - Ardbeg
-  - balltines
-  - chivas regal
-  - jhonnie walker
+  - Balltines
   Smw:
   - jameson irish
+  - GlenDronach
+  - Themacallan
   Red:
   - cabarnet sauvignon
   - radius merlot

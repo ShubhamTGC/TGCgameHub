@@ -26,4 +26,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DragNDrop.unity
     guid: 5fc86b464518f6346a56c6f4c2d88957
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 7ba27e11a5703814a90f90f14faf6349
+  - enabled: 1
+    path: Assets/Scenes/Level1.unity
+    guid: b6694ddcbcc54304e89910dbb6c01cc0
+  - enabled: 1
+    path: Assets/Scenes/Level2.unity
+    guid: dbc5acedb9daa5947a950191fa8441ff
+  - enabled: 1
+    path: Assets/Scenes/Level3.unity
+    guid: 6e91cdcca78c3e44db71b82852cda394
   m_configObjects: {}

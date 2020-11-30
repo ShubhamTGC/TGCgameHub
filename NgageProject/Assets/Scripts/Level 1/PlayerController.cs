@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     private bool canMove;
 
     public int currentScore = 0; 
-    public TextMeshProUGUI scoreText;
+    public Text scoreText;
 
     public int lives;
     public List<Image> heartList;
@@ -166,31 +166,6 @@ public class PlayerController : MonoBehaviour
         return null;
     }
 
-    /*public void jumpButton()
-    {
-        if (isGrounded)
-        {
-            isGrounded = false;
-            this.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 20), ForceMode2D.Impulse);
-            animator.SetBool("isJumping", true);
-            //jump();
-        }
-    }*/
-
-    /*public void moveRight()
-    {
-        hMovement = 1;
-    }
-
-    public void moveLeft()
-    {
-        hMovement = -1;
-    }
-
-    public void moveIdle()
-    {
-        hMovement = 0;
-    }*/
 
     private void OnCollisionEnter2D(Collision2D collision) //to check if player is colliding with anything
     {
@@ -214,7 +189,7 @@ public class PlayerController : MonoBehaviour
             if (lives == 1)
             {
                 lives = 0;
-                gameOverCount[1].text = currentScore.ToString();
+                //gameOverCount[1].text = currentScore.ToString();
                 spawnManager.gameOver(false);
                 //spawnManager.gameOver(false); //game will over if player run out of lives
                 return;
@@ -227,6 +202,7 @@ public class PlayerController : MonoBehaviour
 
             StopCoroutine("popUp");
             StopCoroutine("enemyHit");
+            minusText.GetComponent<Text>().text = "+" + wrong_Point;
             popupText.gameObject.SetActive(false);
             minusText.gameObject.SetActive(false);
             StartCoroutine("enemyHit");
@@ -268,13 +244,14 @@ public class PlayerController : MonoBehaviour
             collision.gameObject.SetActive(false);
             if(currentScore >= completeScore)
             {
-                gameOverCount[0].text = currentScore.ToString();
+                //gameOverCount[0].text = currentScore.ToString();
                 spawnManager.gameOver(true);
             }
 
 
             StopCoroutine("popUp");
             StopCoroutine("enemyHit");
+            popupText.GetComponent<Text>().text = "+" + correct_Point;
             popupText.gameObject.SetActive(false);
             minusText.gameObject.SetActive(false);
             StartCoroutine("popUp");
