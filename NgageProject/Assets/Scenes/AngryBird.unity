@@ -2021,7 +2021,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Are You Sure you want to exit!
+  m_Text: Do you really want to exit the game?
 --- !u!222 &208344191
 CanvasRenderer:
   m_ObjectHideFlags: 0

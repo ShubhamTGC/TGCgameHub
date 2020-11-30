@@ -172,6 +172,8 @@ public class Zonehandler : MonoBehaviour
     public GameObject LeaderBoardPage;
     public GameObject BarHeading;
     public GameObject LightObject, barobject;
+    public List<string> AllItemName;
+    public List<int> AllItemId;
     void Start()
     {
 
@@ -1368,8 +1370,10 @@ public class Zonehandler : MonoBehaviour
             ItemName = y.ItemName
         }).ToList();
 
-        var DistinctElements = Bottlecollected != null && Bottlecollected.Count > 0 ? AllItems.Where(a => !Bottlecollected.Contains(a.ItemName.ToLower().Trim())).Select(b => b.ItemName.ToLower()).ToList() : new List<string>();
-        var DistinctItemId = BottleId != null && BottleId.Count > 0 ? AllItems.Where(c => !BottleId.Contains(c.ItemId)).Select(d => d.ItemId).ToList() : new List<int>();
+        var DistinctElements = Bottlecollected != null && Bottlecollected.Count > 0 ? AllItemName.Where(a => !Bottlecollected.Contains(a.ToLower().Trim())).Select(b => b).ToList() : new List<string>();
+        var DistinctItemId = BottleId != null && BottleId.Count > 0 ? AllItemId.Where(a => !BottleId.Contains(a)).Select(b => b).ToList() : new List<int>();
+        //var DistinctElements = Bottlecollected != null && Bottlecollected.Count > 0 ? AllItems.Where(a => !Bottlecollected.Contains(a.ItemName.ToLower().Trim())).Select(b => b.ItemName.ToLower()).ToList() : new List<string>();
+        //var DistinctItemId = BottleId != null && BottleId.Count > 0 ? AllItems.Where(c => !BottleId.Contains(c.ItemId)).Select(d => d.ItemId).ToList() : new List<int>();
 
 
         for (int a = 0; a < DistinctElements.Count; a++)
@@ -1378,7 +1382,11 @@ public class Zonehandler : MonoBehaviour
             {
                 Bottlecollected.Add(DistinctElements[a]);
             }
-            BottleId.Add(DistinctItemId[a]);
+            if (DistinctItemId.Count > 0)
+            {
+                BottleId.Add(DistinctItemId[a]);
+            }
+            
             Bottle_is_correct.Add(0);
             Bottle_container.Add("null");
             Bottle_score.Add(0);
@@ -1389,11 +1397,18 @@ public class Zonehandler : MonoBehaviour
         }
 
 
-        var AllRoomIdLog = dbmanager.Table<ObjectGameList>().ToList();
-        Bottlecollected.ForEach(a =>
+        //var AllRoomIdLog = dbmanager.Table<ObjectGameList>().ToList();
+        //Bottlecollected.ForEach(a =>
+        //{
+        //    var Log = AllRoomIdLog.Where(x => x.ItemName.ToLower().Trim() == a).FirstOrDefault();
+            
+        //    LocalroomId.Add(Log.RoomId);
+        //});
+
+        Bottlecollected.ForEach(y =>
         {
-            var Log = AllRoomIdLog.Where(x => x.ItemName.ToLower().Trim() == a).FirstOrDefault();
-            LocalroomId.Add(Log.RoomId);
+            var Index = AllItemName.FindIndex(a => a.Equals(y, System.StringComparison.OrdinalIgnoreCase));
+            LocalroomId.Add(AllItemId[Index]);
         });
 
 
