@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     ///            API
     /// </summary>
-    private const string getApiURL = "http://140.238.249.68/TGCGame/api/shootandrungamesetup";
+    //private const string getApiURL = "http://140.238.249.68/TGCGame/api/shootandrungamesetup";
     private const string getAttemptURL = "http://140.238.249.68/TGCGame/api/getattemptNo?UID=1&GID=1&RID=2";
     //public Text responseText;
 
@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     {
         DontDestroyOnLoad(this.gameObject);
         ID_GAME = 7;
-        StartCoroutine(getDetails());
+        //StartCoroutine(getDetails());
         isReplaying = new bool[3];
         for(int i = 0; i < isReplaying.Length; i++)
         {
@@ -68,27 +68,27 @@ public class GameManager : MonoBehaviour
         
     }
 
-    IEnumerator getDetails()
-    {
-        AESAlgorithm AES = new AESAlgorithm();
-        string hittingURL = $"{getApiURL}";
-        WWW Request = new WWW(hittingURL);
-        yield return Request;
-        if (Request.text != null)
-        {
-            if (Request.text != "")
-            {
-                string CompleteLog = Request.text.TrimStart('"').TrimEnd('"');
-                string Log = AES.getDecryptedString(CompleteLog);
-                GetModel getLog = Newtonsoft.Json.JsonConvert.DeserializeObject<GetModel>(Log);
-                gameConfig = getLog.gamelist;
-                heroes = getLog.herelist;
-                enemies = getLog.enemieslist;
-                attacktools = getLog.attacktoollist;
-                objects = getLog.objectgamilist;
-            }
-        }
-    }   
+    //IEnumerator getDetails()
+    //{
+    //    AESAlgorithm AES = new AESAlgorithm();
+    //    string hittingURL = $"{getApiURL}";
+    //    WWW Request = new WWW(hittingURL);
+    //    yield return Request;
+    //    if (Request.text != null)
+    //    {
+    //        if (Request.text != "")
+    //        {
+    //            string CompleteLog = Request.text.TrimStart('"').TrimEnd('"');
+    //            string Log = AES.getDecryptedString(CompleteLog);
+    //            GetModel getLog = Newtonsoft.Json.JsonConvert.DeserializeObject<GetModel>(Log);
+    //            gameConfig = getLog.gamelist;
+    //            heroes = getLog.herelist;
+    //            enemies = getLog.enemieslist;
+    //            attacktools = getLog.attacktoollist;
+    //            objects = getLog.objectgamilist;
+    //        }
+    //    }
+    //}   
 
     
 }

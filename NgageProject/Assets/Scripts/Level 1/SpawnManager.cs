@@ -49,7 +49,8 @@ public class SpawnManager : MonoBehaviour
 
     private const string getAttemptURL = "http://140.238.249.68/TGCGame/api/getattemptNo";
 
-    public GameObject PausePage, Leaderboard;
+    public GameObject PausePage, Leaderboard,ScratchcardPage;
+    private bool IsPassed;
 
     //?UID=1&GID=1&RID=2
 
@@ -68,7 +69,7 @@ public class SpawnManager : MonoBehaviour
         //    player.wrong_Point = wrong_point;
         //}
 
-      
+        IsPassed = false;
         StartCoroutine(getAttemptNo());
         
     }
@@ -158,11 +159,13 @@ public class SpawnManager : MonoBehaviour
         {
             //gameStatus = "not_completed";
             died.gameObject.SetActive(true);
+            IsPassed = false;
         }
         else
         {
             //gameStatus = "completed";
             scored.gameObject.SetActive(true);
+            IsPassed = true;
         }
     }
 
@@ -353,7 +356,16 @@ public class SpawnManager : MonoBehaviour
         Time.timeScale = 1f;
         player.gameObject.SetActive(false);
         Panel.SetActive(false);
-        Leaderboard.SetActive(true);
+        if (IsPassed)
+        {
+            ScratchcardPage.SetActive(true);
+        }
+        else
+        {
+            Leaderboard.SetActive(true);
+        }
+
+       
     }
 
     public void BacktoHomepage()

@@ -94,6 +94,7 @@ public class HomePageCardSection : MonoBehaviour
             List<OverallScoreModel> Model = Newtonsoft.Json.JsonConvert.DeserializeObject<List<OverallScoreModel>>(decryptedLog);
             userScore.text =  Model[0].score.ToString();
             Uservalue =  Model[0].score.GetValueOrDefault(0);
+            PlayerPrefs.SetInt("Percentile", Model[0].Percentiles);
         }
         else
         {

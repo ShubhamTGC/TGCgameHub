@@ -174,6 +174,9 @@ public class Zonehandler : MonoBehaviour
     public GameObject LightObject, barobject;
     public List<string> AllItemName;
     public List<int> AllItemId;
+    public GameObject ScartchcardPage;
+    private bool IsPassed;
+    private float PercentageScore;
     void Start()
     {
 
@@ -181,6 +184,7 @@ public class Zonehandler : MonoBehaviour
     }
     void OnEnable()
     {
+        IsPassed = false;
         homeinstance = HomePageScript.Homepage;
         Bardata = new List<KeyValuePair<string, List<string>>>()
         {
@@ -216,6 +220,8 @@ public class Zonehandler : MonoBehaviour
         //backPAge.onClick.AddListener(delegate { LeftPageEnable(); });
         CloseDoublePopup = false;
         // Initialtask(0);
+        var Pscore = dbmanager.Table<GameListDetails>().FirstOrDefault(x => x.GameId == Id_game).CompletePer;
+        PercentageScore = Pscore;
 
     }
 
@@ -1350,9 +1356,10 @@ public class Zonehandler : MonoBehaviour
 
         float percentage = ((float)level1score / (float)totalscore) * 100;
         string Msg;
-        if (percentage > 75.0f)
+        if (percentage > PercentageScore)
         {
              Msg = "Congraulation! you have cleared this Game.";
+            IsPassed = true;
             AvatarMood.sprite = happy;
             //StartCoroutine(showstatus(msg));
         }
@@ -1450,9 +1457,17 @@ public class Zonehandler : MonoBehaviour
     {
         iTween.ScaleTo(PopupPage, Vector3.zero,0.4f);
         yield return new WaitForSeconds(0.3f);
-        msgbox.text = "";
+
         PopupPage.SetActive(false);
-        LeaderBoardPage.SetActive(true);
+        msgbox.text = "";
+        if (IsPassed)
+        {
+            ScartchcardPage.SetActive(true);
+        }
+        else
+        {
+            LeaderBoardPage.SetActive(true);
+        }
     }
     IEnumerator GameScorePosting()
     {

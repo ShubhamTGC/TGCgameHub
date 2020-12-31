@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "772564493659",
+    "firebase_url": "https://tgc-game-hub.firebaseio.com",
+    "project_id": "tgc-game-hub",
+    "storage_bucket": "tgc-game-hub.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:772564493659:android:896fcfc85534730de1267e",
+        "android_client_info": {
+          "package_name": "com.TGC.GameHub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "772564493659-hnk7gno3plsal0mb4u0miei4fhmo9vbu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.TGC.GameHub",
+            "certificate_hash": "f3bfa29b9b84a7a1a76a327999888bd4f06802d4"
+          }
+        },
+        {
+          "client_id": "772564493659-ra1l7tt2714jjqhgeos69f58eath0n68.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.TGC.GameHub",
+            "certificate_hash": "23a55196ed73a6bd70e2fdb4bdd0f3cee691748b"
+          }
+        },
+        {
+          "client_id": "772564493659-pepicu1scm13fb92hpoql304odj7og3u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjWELgLw0kLahWwA7RsYyZUXtJx9SP-iM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "772564493659-pepicu1scm13fb92hpoql304odj7og3u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

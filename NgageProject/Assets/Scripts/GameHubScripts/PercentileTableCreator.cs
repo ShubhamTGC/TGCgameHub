@@ -15,14 +15,20 @@ public class PercentileTableCreator : MonoBehaviour
     public GameObject dataPrefeb;
     public GameObject ViewPage;
     public HomePageCardSection homepage;
+    private int UserPercentile;
+    private bool IsInrange;
+    [SerializeField] private List<Color> BarColors;
     void Start()
     {
         
     }
+    
 
     private void OnEnable()
     {
-        if(Rows.Count == 0)
+        UserPercentile = PlayerPrefs.GetInt("Percentile");
+        IsInrange = false;
+        if (Rows.Count == 0)
         {
             StartCoroutine(generateTable());
         }
@@ -39,12 +45,21 @@ public class PercentileTableCreator : MonoBehaviour
             gb.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = (a + 1).ToString();
             gb.SetActive(true);
             gb.transform.GetChild(0).transform.GetChild(1).GetComponent<Text>().text = "Players between " + TableLog[a + 1].ToString() + "th to " + TableLog[a].ToString() + "th" + " Percentile";
+            gb.GetComponent<Image>().color = BarColors[a];
             Rows.Add(gb);
             string objectName = TableLog[a + 1].ToString() + "/" + TableLog[a].ToString() + "/";
+            IsInrange = TableLog[a] >= UserPercentile && UserPercentile >= TableLog[a + 1]; 
             Button btn = gb.transform.GetChild(0).transform.GetChild(2).gameObject.GetComponent<Button>();
             btn.onClick.RemoveAllListeners();
             btn.onClick.AddListener(delegate { PercentileBasedBoard(objectName, gb.transform, btn); });
+            if (IsInrange)
+            {
+                PercentileBasedBoard(objectName, gb.transform, btn);
+            }
         }
+
+
+
       
 
     }

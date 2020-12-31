@@ -43,7 +43,8 @@ public class Spawn3Manager : MonoBehaviour
     private int RoomId;
     [SerializeField] private int GameId;
     public GameObject PausePage, Leaderboard;
-
+    private bool IsPassed;
+    public GameObject Scartchcardpage;
 
     private void Awake()
     {
@@ -53,6 +54,7 @@ public class Spawn3Manager : MonoBehaviour
 
     private void OnEnable()
     {
+        IsPassed = false;
         StartCoroutine(getAttemptNo());
     }
 
@@ -140,11 +142,13 @@ public class Spawn3Manager : MonoBehaviour
         {
             //gameStatus = "not_completed";
             died.gameObject.SetActive(true);
+            IsPassed = false;
         }
         else
         {
             //gameStatus = "completed";
             scored.gameObject.SetActive(true);
+            IsPassed = true;
         }
     }
 
@@ -333,7 +337,15 @@ public class Spawn3Manager : MonoBehaviour
         Time.timeScale = 1f;
         player.gameObject.SetActive(false);
         Panel.SetActive(false);
-        Leaderboard.SetActive(true);
+        if (IsPassed)
+        {
+            Scartchcardpage.SetActive(true);
+        }
+        else
+        {
+            Leaderboard.SetActive(true);
+        }
+        
     }
 
     public void BacktoHomepage()

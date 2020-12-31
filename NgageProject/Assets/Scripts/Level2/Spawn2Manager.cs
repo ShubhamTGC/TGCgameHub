@@ -44,7 +44,8 @@ public class Spawn2Manager : MonoBehaviour
 
     [SerializeField] private int GameId;
     private int RoomId;
-
+    private bool IsPassed;
+    public GameObject ScartchcardPage;
     private void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
@@ -53,7 +54,7 @@ public class Spawn2Manager : MonoBehaviour
 
     private void OnEnable()
     {
-
+        IsPassed = false;
         StartCoroutine(getAttemptNo());
     }
 
@@ -142,11 +143,13 @@ public class Spawn2Manager : MonoBehaviour
         {
             //gameStatus = "not_completed";
             died.gameObject.SetActive(true);
+            IsPassed = false;
         }
         else
         {
             //gameStatus = "completed";
             scored.gameObject.SetActive(true);
+            IsPassed = true;
         }
     }
 
@@ -333,7 +336,15 @@ public class Spawn2Manager : MonoBehaviour
         Time.timeScale = 1f;
         player.gameObject.SetActive(false);
         Panel.SetActive(false);
-        Leaderboard.SetActive(true);
+        if (IsPassed)
+        {
+            ScartchcardPage.SetActive(true);
+        }
+        else
+        {
+            Leaderboard.SetActive(true);
+        }
+       
     }
 
     public void BacktoHomepage()

@@ -20,5 +20,8 @@ public class MainUrls
     public static string AppVersionApi = "GetVersion";
     public static string GetPercentileApi = "GetPercentilesList";
     public static string PostShootnRunApi = "shootandrundetailsuserlog";
+    public static string PostScratchCard = "scratchcarduserLog";
+    public static string PostCardID = "IsSratch";
+    public static string GetUserCards = "GetUserScratchCard";
 
 }

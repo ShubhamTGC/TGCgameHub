@@ -72,7 +72,8 @@ public class Stage2ZoneHandler : MonoBehaviour
     public GameObject LeaderBoardPage;
     public GameObject popUpPage;
     public Transform Level1objecthandler, Level2Objecthandler;
-     
+    public GameObject ScartchcardPage;
+    private bool IsPassed;
     void Start()
     {
         
@@ -80,6 +81,7 @@ public class Stage2ZoneHandler : MonoBehaviour
 
      void OnEnable()
     {
+        IsPassed = false;
         homeinstance = HomePageScript.Homepage;
         level1.SetActive(true);
         level1Mainpage.SetActive(true);
@@ -179,6 +181,7 @@ public class Stage2ZoneHandler : MonoBehaviour
         if(UserPercentage >= percentageValue)
         {
             msg = "Congratulations ! You have cleared this game with " + UserPercentage.ToString("0") + "%";
+            IsPassed = true;
             AvatarImage.sprite = happy;
         }
         else
@@ -198,9 +201,17 @@ public class Stage2ZoneHandler : MonoBehaviour
     {
         iTween.ScaleTo(lastpageOptions, Vector3.zero, 0.3f);
         yield return new WaitForSeconds(0.4f);
-        popupMsg.text = "";
+    
         lastpageOptions.SetActive(false);
-        LeaderBoardPage.SetActive(true);
+        popupMsg.text = "";
+        if (IsPassed)
+        {
+            ScartchcardPage.SetActive(true);
+        }
+        else
+        {
+            LeaderBoardPage.SetActive(true);
+        }
     }
     IEnumerator Level1clear(string msg)
     {

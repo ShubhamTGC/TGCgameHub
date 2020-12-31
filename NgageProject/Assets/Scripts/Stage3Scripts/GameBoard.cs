@@ -141,7 +141,9 @@ public class GameBoard : MonoBehaviour
     public GameObject GameStatuspage,GameLeaderBoard;
     public Text Statusmsg;
     public Image StatusMood;
-
+    private bool IsPassed;
+    public GameObject ScartchcardPage;
+    private float percentageScore;
     private void Awake()
     {
         DustbinCollectCount = 0;
@@ -187,6 +189,8 @@ public class GameBoard : MonoBehaviour
 
     void OnEnable()
     {
+        ObjCounter = 0;
+        IsPassed = false;
         homeinstance = HomePageScript.Homepage;
         var localLog = dbmanager.Table<TruckGameList>().FirstOrDefault();
         if (localLog != null)
@@ -209,8 +213,8 @@ public class GameBoard : MonoBehaviour
         {
             monsterAttackScore = Monsterdata.CatchPoint;
         }
-       
 
+        percentageScore = dbmanager.Table<GameListDetails>().FirstOrDefault(x => x.GameId == Id_game).CompletePer;
         StartCoroutine(GetGameAttemptNoTask());
     }
 
@@ -265,7 +269,7 @@ public class GameBoard : MonoBehaviour
         for(int a = 0; a < 3; a++)
         {
             CurrentActive[a].SetActive(true);
-            ObjCounter++;
+            //ObjCounter++;
         }
         ActiveTruckCount++;
 
@@ -424,7 +428,7 @@ public class GameBoard : MonoBehaviour
             CurrentActive[num].SetActive(true);
             StartCoroutine(ResetBool());
             ObjCounter++;
-
+            Debug.Log(" counter of object " + ObjCounter);
         }
         else
         {
@@ -507,7 +511,7 @@ public class GameBoard : MonoBehaviour
     public void PlayGame()
     {
         Taskcounter = 0;
-        ObjCounter = 0;
+        //ObjCounter = 0;
         if (ActiveTruckCount > 0)
         {
             //CurrentActive.Clear();
@@ -689,9 +693,10 @@ public class GameBoard : MonoBehaviour
         StartCoroutine(GameScorePosting());
         StartCoroutine(PostruckDrivingGame());
        
-        if (percentage > 75.0f)
+        if (percentage > percentageScore)
         {
             Statusmsg.text = "Congratulations! you have cleared this game!!!";
+            IsPassed = true;
             StatusMood.sprite = goodmood;
             GameStatuspage.SetActive(true);
         }
@@ -713,9 +718,17 @@ public class GameBoard : MonoBehaviour
     {
         iTween.ScaleTo(GameStatuspage, Vector3.zero, 0.4f);
         yield return new WaitForSeconds(0.5f);
+     
         GameStatuspage.SetActive(false);
         Statusmsg.text = "";
-        GameLeaderBoard.SetActive(true);
+        if (IsPassed)
+        {
+            ScartchcardPage.SetActive(true);
+        }
+        else
+        {
+            GameLeaderBoard.SetActive(true);
+        }
     }
 
 

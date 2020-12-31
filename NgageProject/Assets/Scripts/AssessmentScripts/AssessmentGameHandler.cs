@@ -80,7 +80,8 @@ public class AssessmentGameHandler : MonoBehaviour
     public GameObject PausePage;
     private int Id_game;
     private float Gamepercentage;
-    public GameObject LeaderboardPage;
+    public GameObject LeaderboardPage, ScartchcardPage;
+    private bool IsPassed;
     void Start()
     {
       
@@ -278,11 +279,13 @@ public class AssessmentGameHandler : MonoBehaviour
         if(percentage >= Gamepercentage)
         {
             string msg = "Congratulation! You have cleared this game.";
+            IsPassed = true;
             StartCoroutine(ShowPopuppage(msg));
         }
         else
         {
             string msg = "Sorry! You have failed in this game.";
+            IsPassed = false;
             StartCoroutine(ShowPopuppage(msg));
         }
     }
@@ -305,7 +308,14 @@ public class AssessmentGameHandler : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         lastPage.SetActive(false);
         msgbox.text = "";
-        LeaderboardPage.SetActive(true);
+        if (IsPassed)
+        {
+            ScartchcardPage.SetActive(true);
+        }
+        else
+        {
+            LeaderboardPage.SetActive(true);
+        }
     }
 
 

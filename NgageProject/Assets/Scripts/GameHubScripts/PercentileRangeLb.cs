@@ -55,8 +55,16 @@ public class PercentileRangeLb : MonoBehaviour
                         for(int a = 0; a < boardData.Count; a++)
                         {
                             GameObject gb = Instantiate(Rowprefeb, Rowhandler, false);
+                            if(boardData[a].UserId == PlayerPrefs.GetInt("UID"))
+                            {
+                                if(gb.transform.GetSiblingIndex() > 2)
+                                {
+                                    gb.transform.SetSiblingIndex(2);
+                                }
+                               
+                            }
                             RowList.Add(gb);
-                            gb.transform.GetChild(0).gameObject.GetComponent<Text>().text = (a + 1).ToString() + ")";
+                            gb.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<Text>().text = (a + 1).ToString();
                             gb.transform.GetChild(2).gameObject.GetComponent<Text>().text = boardData[a].Name;
                             gb.transform.GetChild(3).gameObject.GetComponent<Text>().text = boardData[a].score.ToString();
                             gb.transform.GetChild(4).transform.GetChild(0).gameObject.GetComponent<Text>().text = boardData[a].Percentiles.ToString() + "th";

@@ -12,6 +12,9 @@ TagManager:
   - animatorobj
   - reduce
   - Container
+  - Border
+  - Groud
+  - Card
   layers:
   - Default
   - TransparentFX

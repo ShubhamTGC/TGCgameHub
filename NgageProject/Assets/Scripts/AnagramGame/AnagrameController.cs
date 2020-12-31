@@ -78,6 +78,14 @@ public class AnagrameController : MonoBehaviour
     public GameObject leaderboardPage;
     //public GameObject Loadingbar;
     //public CustomLoader Loading;
+    private bool IsPassed;
+    public GameObject ScartchcardPage;
+    public GameObject WinText, LoseText;
+    public GameObject ScratchCard, CardResult;
+    private int CardIDWin,PostCardID;
+    private int CardScore;
+    public ScratchCardEffect cardEffectpage;
+    public GameObject cardPanelpage;
     void Start()
     {
 
@@ -86,6 +94,7 @@ public class AnagrameController : MonoBehaviour
 
     private void OnEnable()
     {
+        IsPassed = false;
         homeinstance = HomePageScript.Homepage;
         ZoneHandlers = new ZoneShowHandler();
        
@@ -394,14 +403,18 @@ public class AnagrameController : MonoBehaviour
         if (percentage >= percentageScore)
         {
             string msg = "Congratulatuons! \n you have cleared this Game!!!";
+            IsPassed = true;
             StartCoroutine(GameoverPage(msg,Happy));
         }
         else
         {
+            IsPassed = false;
             string msg = "Sorry \n you have failed in this Game!!!";
             StartCoroutine(GameoverPage(msg,sad));
         }
     }
+
+
 
     public void closeLastPage()
     {
@@ -414,8 +427,17 @@ public class AnagrameController : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
         PausePage.SetActive(false);
         msgbox.text = "";
-        leaderboardPage.SetActive(true);
+        if (IsPassed)
+        {
+            ScartchcardPage.SetActive(true);
+        }
+        else
+        {
+            leaderboardPage.SetActive(true);
+        }
     }
+
+ 
 
     IEnumerator GameoverPage(string msg,Sprite mood)
     {
@@ -542,7 +564,6 @@ public class AnagrameController : MonoBehaviour
             }
         }
 
-
     }
 
 
@@ -612,7 +633,6 @@ public class AnagrameController : MonoBehaviour
                 {
                     Timer.text = "00:" + "0" + Timecounter.ToString();
                 }
-               
                 StartCoroutine(TimerCounter());
             }
         }
@@ -639,6 +659,20 @@ public class AnagrameController : MonoBehaviour
         StartCoroutine(TimerCounter());
     }
 
-    
+    public void AfterCardPostingtask()
+    {
+        StartCoroutine(CloseCardpageTask());
+    }
+
+    IEnumerator CloseCardpageTask()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Destroy(CardResult);
+        yield return new WaitForSeconds(0.5f);
+        cardPanelpage.SetActive(false);
+        leaderboardPage.SetActive(true);
+    }
+
+
 
 }

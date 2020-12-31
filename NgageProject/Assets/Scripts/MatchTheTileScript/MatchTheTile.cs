@@ -88,6 +88,8 @@ public class MatchTheTile : MonoBehaviour
     public GameObject Leaderboard;
     public AudioSource SoundEffect;
     public AudioClip wrongclip, Rightclip;
+    public GameObject Scartchcardpage;
+    private bool IsPassed;
     void Start()
     {
         homeinstance = HomePageScript.Homepage;
@@ -97,6 +99,7 @@ public class MatchTheTile : MonoBehaviour
 
      void OnEnable()
     {
+        IsPassed = false;
         StartCoroutine(GetGameAttemptNoTask());
         TimeBool = true;
         helpingbool = true;
@@ -128,8 +131,8 @@ public class MatchTheTile : MonoBehaviour
             locationNameList.Add(y.Type);
         });
 
-        var GameScoredata = dbmanager.Table<GameListDetails>().FirstOrDefault();
-        gamePercentage = GameScoredata.CompletePer;
+        var GameScoredata = dbmanager.Table<GameListDetails>().FirstOrDefault(x => x.GameId == Id_game).CompletePer;
+        gamePercentage = GameScoredata;
 
     }
     IEnumerator getLocaldata() 
@@ -485,11 +488,12 @@ public class MatchTheTile : MonoBehaviour
         StartCoroutine(PostMasterLog());
         if(percentage >= gamePercentage)
         {
-            Winmsg = "You have cleared this game with " + percentage.ToString("2") + " %";
+            Winmsg = "Congratulations! You have cleared this game";
+            IsPassed = true;
         }
         else
         {
-            Winmsg ="You have faild in this game with " + percentage.ToString("2") + " %";
+            Winmsg ="Sorry!You have faild in this game";
         }
         msgbox.text = Winmsg;
         Avatarmood.sprite = Sad;
@@ -508,9 +512,17 @@ public class MatchTheTile : MonoBehaviour
     {
         iTween.ScaleTo(PopupPage, Vector3.zero, 0.4f);
         yield return new WaitForSeconds(0.5f);
-        msgbox.text = "";
+  
         PopupPage.SetActive(false);
-        Leaderboard.SetActive(true);
+        msgbox.text = "";
+        if (IsPassed)
+        {
+            Scartchcardpage.SetActive(true);
+        }
+        else
+        {
+            Leaderboard.SetActive(true);
+        }
     }
     IEnumerator PostGameDetails()
     {
