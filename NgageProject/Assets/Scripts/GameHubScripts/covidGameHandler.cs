@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 using SimpleSQL;
 using System.Linq;
-
+using UnityEngine.UI;
 public class covidGameHandler : MonoBehaviour
 {
     public GameObject Gameguide,covidGame,scorepanel;
@@ -15,11 +15,47 @@ public class covidGameHandler : MonoBehaviour
     private AudioSource audioSource;
     public GameObject loadingbar;
     public CustomLoader loader;
+    [SerializeField] private int Gameid;
+    public List<GameObject> ambulance, Monsters;
+    public Transform capsulteTransform;
+    public GameObject Centerobject;
     private void Awake()
     {
+        var id = dbmanager.Table<MonsterDetails>().Select(y => y.GameId);
+        Gameid = id.FirstOrDefault();
         audioSource = Camera.main.gameObject.GetComponent<AudioSource>();
         StartCoroutine(getSoundData());
+        TruckDriveElementSetup();
+    
     }
+
+    void TruckDriveElementSetup()
+    {
+        var TruckImage = dbmanager.Table<TruckGameList>().FirstOrDefault(x => x.GameId == Gameid).TruckImgUrl;
+        var CapsuleImg = dbmanager.Table<TruckGameList>().FirstOrDefault(x => x.GameId == Gameid).CapsuleImgUrl;
+        var CenterImg = dbmanager.Table<TruckGameList>().FirstOrDefault(x => x.GameId == Gameid).CenterImgUrl;
+        var monsterImg = dbmanager.Table<MonsterDetails>().FirstOrDefault(y => y.GameId == Gameid).MonsterImgUrl;
+
+        Sprite ambulanceImage = GetAvatarSprite(TruckImage, Path.GetFileNameWithoutExtension(TruckImage));
+        ambulance.ForEach(x =>
+        {
+            x.GetComponent<SpriteRenderer>().sprite = ambulanceImage;
+        });
+        Sprite Causules = GetAvatarSprite(CapsuleImg, Path.GetFileNameWithoutExtension(CapsuleImg));
+        int count = capsulteTransform.transform.childCount;
+        for (int a = 0; a < count; a++)
+        {
+            capsulteTransform.transform.GetChild(a).gameObject.GetComponent<SpriteRenderer>().sprite = Causules;
+        }
+        Sprite Center = GetAvatarSprite(CenterImg, Path.GetFileNameWithoutExtension(CenterImg));
+        Centerobject.GetComponent<SpriteRenderer>().sprite = Center;
+        Sprite MonsterAvatar = GetAvatarSprite(monsterImg, Path.GetFileNameWithoutExtension(monsterImg));
+        Monsters.ForEach(a =>
+        {
+            a.GetComponent<SpriteRenderer>().sprite = MonsterAvatar;
+        });
+    }
+
 
 
     IEnumerator getSoundData()

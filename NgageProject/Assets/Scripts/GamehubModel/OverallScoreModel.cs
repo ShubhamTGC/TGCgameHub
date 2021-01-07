@@ -11,4 +11,6 @@ public class OverallScoreModel
     public int coins { get; set; }
     public int? badge_id { get; set; }
     public int? BadgeCount { get; set; }
+    public int OpeningBalance { get; set; }
+
 }

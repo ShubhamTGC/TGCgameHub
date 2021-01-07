@@ -11,6 +11,29 @@ using UnityEditor;
 using UnityEngine.SceneManagement;
 using m2ostnextservice.Models;
 
+public class Root
+{
+    public int Id_Game { get; set; }
+    public string Game_Name { get; set; }
+    public int Id_Room { get; set; }
+    public string Room_Name { get; set; }
+    public int item_Id { get; set; }
+    public string item_Name { get; set; }
+    public object Complete_Score { get; set; }
+    public int correct_point { get; set; }
+    public int Wrong_point { get; set; }
+    public string ObjItemZoomImgURL { get; set; }
+    public string BarrelName { get; set; }
+    public object DustbinImgURL { get; set; }
+    public string ObjItemImgURL { get; set; }
+}
+
+public class SampleData
+{
+    public List<Root> Bar { get; set; }
+}
+
+
 public class Zonehandler : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -113,18 +136,18 @@ public class Zonehandler : MonoBehaviour
     // private int Room_oneId,Room_twoId,Room_thirdId;
 
     //========================== CMS CONFIGURABLE SCORE OF OBJECTS ======================================
-   public List<string> CMsobjectRoom1 = new List<string>();
-   public List<string> CMsobjectRoom2 = new List<string>();
-   public List<string> CMsobjectRoom3 = new List<string>();
-   public List<int> CmsObjectId1 = new List<int>();
-   public List<int> CmsObjectId2 = new List<int>();
-   public List<int> CmsObjectId3 = new List<int>();
-   public List<int> CMsObjectCscore1 = new List<int>();
-   public List<int> CMsObjectCscore2 = new List<int>();
-   public List<int> CMsObjectCscore3 = new List<int>();
-   public List<int> CMsObjectPCscore1 = new List<int>();
-   public List<int> CMsObjectPCscore2 = new List<int>();
-   public List<int> CMsObjectPCscore3 = new List<int>();
+    public List<string> CMsobjectRoom1 = new List<string>();
+    public List<string> CMsobjectRoom2 = new List<string>();
+    public List<string> CMsobjectRoom3 = new List<string>();
+    public List<int> CmsObjectId1 = new List<int>();
+    public List<int> CmsObjectId2 = new List<int>();
+    public List<int> CmsObjectId3 = new List<int>();
+    public List<int> CMsObjectCscore1 = new List<int>();
+    public List<int> CMsObjectCscore2 = new List<int>();
+    public List<int> CMsObjectCscore3 = new List<int>();
+    public List<int> CMsObjectPCscore1 = new List<int>();
+    public List<int> CMsObjectPCscore2 = new List<int>();
+    public List<int> CMsObjectPCscore3 = new List<int>();
 
     public List<string> CurrentItemList = new List<string>();
     public List<int> CurrentPCscore = new List<int>();
@@ -177,6 +200,7 @@ public class Zonehandler : MonoBehaviour
     public GameObject ScartchcardPage;
     private bool IsPassed;
     private float PercentageScore;
+    public Text Response, Response2;
     void Start()
     {
 
@@ -186,6 +210,8 @@ public class Zonehandler : MonoBehaviour
     {
         IsPassed = false;
         homeinstance = HomePageScript.Homepage;
+
+        var s = new SampleData().Bar.GroupBy(x => x.BarrelName).Select(x => new KeyValuePair<string, List<string>>(x.Key, x.Select(y => y.item_Name).ToList())).ToList();
         Bardata = new List<KeyValuePair<string, List<string>>>()
         {
             new KeyValuePair<string,List<string>>("Ale",Ale),
@@ -1264,7 +1290,9 @@ public class Zonehandler : MonoBehaviour
             popupScore.GetComponent<RectTransform>().localPosition = new Vector3(containerpos, popupScore.GetComponent<RectTransform>().localPosition.y, 0);
             Scorestatus.GetComponent<RectTransform>().localPosition = new Vector3(containerpos, Scorestatus.GetComponent<RectTransform>().localPosition.y, 0);
             popupScore.text = "+" + CurrentCscore[index].ToString();
-            Scorestatus.text = "Spot on!";
+            //Scorestatus.text = "Spot on!";
+            Response.text = "Spot on!";
+            Response2.text = "Spot on!";
             Debug.Log("Same type");
             StartCoroutine(reseteffect());
             level1score += CurrentCscore[index];
@@ -1291,7 +1319,9 @@ public class Zonehandler : MonoBehaviour
             popupScore.GetComponent<RectTransform>().localPosition = new Vector3(containerpos, popupScore.GetComponent<RectTransform>().localPosition.y, 0);
             Scorestatus.GetComponent<RectTransform>().localPosition = new Vector3(containerpos, Scorestatus.GetComponent<RectTransform>().localPosition.y, 0);
             popupScore.text = "+" + CurrentPCscore[index].ToString();
-            Scorestatus.text = "You are high!";
+            //Scorestatus.text = "You are high!";
+            Response.text = "You are high!";
+            Response2.text = "You are high!";
             Debug.Log("wrong type");
             StartCoroutine(reseteffect());
             level1score += CurrentPCscore[index];
@@ -1311,6 +1341,8 @@ public class Zonehandler : MonoBehaviour
         yield return new WaitForSeconds(1.25f);
         popupScore.text = "";
         Scorestatus.text = "";
+        Response.text = "";
+        Response2.text = "";
     }
 
 
@@ -1335,7 +1367,7 @@ public class Zonehandler : MonoBehaviour
         StartCoroutine(Hometask(index));
     }
 
-  
+
 
 
     void Final_dashboard()
@@ -1343,7 +1375,7 @@ public class Zonehandler : MonoBehaviour
         Done_msg_panel.transform.GetChild(0).gameObject.GetComponent<Text>().text = "";
         iTween.ScaleTo(Done_msg_panel, Vector3.zero, 0.4f);
         int totalScore = 0;
-        
+
         var data = dbmanager.Table<ObjectGameList>().ToList();
 
         data.ForEach(d =>
@@ -1358,7 +1390,7 @@ public class Zonehandler : MonoBehaviour
         string Msg;
         if (percentage > PercentageScore)
         {
-             Msg = "Congraulation! you have cleared this Game.";
+            Msg = "Congraulation! you have cleared this Game.";
             IsPassed = true;
             AvatarMood.sprite = happy;
             //StartCoroutine(showstatus(msg));
@@ -1366,7 +1398,7 @@ public class Zonehandler : MonoBehaviour
         else
         {
             AvatarMood.sprite = sad;
-             Msg = "Sorry! you are too high for this game.";
+            Msg = "Sorry! you are too high for this game.";
             //StartCoroutine(showstatus(msg));
         }
         msgbox.text = Msg;
@@ -1393,7 +1425,7 @@ public class Zonehandler : MonoBehaviour
             {
                 BottleId.Add(DistinctItemId[a]);
             }
-            
+
             Bottle_is_correct.Add(0);
             Bottle_container.Add("null");
             Bottle_score.Add(0);
@@ -1408,7 +1440,7 @@ public class Zonehandler : MonoBehaviour
         //Bottlecollected.ForEach(a =>
         //{
         //    var Log = AllRoomIdLog.Where(x => x.ItemName.ToLower().Trim() == a).FirstOrDefault();
-            
+
         //    LocalroomId.Add(Log.RoomId);
         //});
 
@@ -1455,7 +1487,7 @@ public class Zonehandler : MonoBehaviour
 
     IEnumerator CloselastPage()
     {
-        iTween.ScaleTo(PopupPage, Vector3.zero,0.4f);
+        iTween.ScaleTo(PopupPage, Vector3.zero, 0.4f);
         yield return new WaitForSeconds(0.3f);
 
         PopupPage.SetActive(false);
@@ -1520,7 +1552,7 @@ public class Zonehandler : MonoBehaviour
 
     }
 
-    IEnumerator Post_data(string Jsondata) 
+    IEnumerator Post_data(string Jsondata)
     {
         string HittingUrl = $"{MainUrls.BaseUrl}{MainUrls.ObjectGamePostApi}";
 

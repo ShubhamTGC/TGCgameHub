@@ -17,6 +17,7 @@ public class GameSetupModel
     public List<attacktoollist> attacktoollist { get; set; }
     public List<enemieslist> enemieslist { get; set; }
     public List<herelist> herelist { get; set; }
+    public List<monsterSpeedByScoreList> monsterSpeedByScoreList { get; set; }
 
 }
 
@@ -32,6 +33,9 @@ public class Gamelist
     public string RectangleImgURL { get; set; }
     public string RoundedImgURL { get; set; }
     public int UpdatedFlag { get; set; }
+    public string BackgroundImgURL { get; set; }
+    public string Level1ImgURl { get; set; }
+    public string Level2ImgURl { get; set; }
 }
 
 public class Anagramlist
@@ -58,6 +62,7 @@ public class Monstercatchlist
     public int catch_point { get; set; }
     public int UpdatedFlag { get; set; }
     public int Id_Game { get; set; }
+    public string MonsterImgURL { get; set; }
     public object tbl_truck_prioritize_master { get; set; }
 }
 
@@ -72,6 +77,9 @@ public class Truckgamelist
     public int Correct_Dustbin_Point { get; set; }
     public int Wrong_Dustbin_Point { get; set; }
     public int ScoreId { get; set; }
+    public string truckImg { get; set; }
+    public string capsuleImg { get; set; }
+    public string TheamImg { get; set; }
 }
 
 public class Quizelist
@@ -101,6 +109,11 @@ public class Objectgamilist
     public int correct_point { get; set; }
     public int Wrong_point { get; set; }
     public int? Complete_Score { get; set; }
+    public string ObjItemZoomImgURL { get; set; }
+    public string BarrelName { get; set; }
+    public string DustbinImgURL { get; set; }
+    public string ObjItemImgURL { get; set; }
+
 }
 
 public class Truckscoretypelist
@@ -174,4 +187,13 @@ public class herelist
     public string HeroName { get; set; }
     public string IsActive { get; set; }
     public DateTime Updated_Date_Time { get; set; }
+}
+
+public class monsterSpeedByScoreList
+{
+    public int Speed_Id { get; set; }
+    public int Score { get; set; }
+    public int Id_Game { get; set; }
+    public int ID_ORGANIZATION { get; set; }
+    public float Speed_Value { get; set; }
 }

@@ -309,8 +309,8 @@ public class AnagrameController : MonoBehaviour
     
     IEnumerator CheckForAns()
     {
-        yield return new WaitForSeconds(1f);
         Timepaused = false;
+        yield return new WaitForSeconds(0.5f);
         for (int a = 0; a < CorrectAns.Length; a++)
         {
             if(CorrectAns[a] == SelectedWord[a])

@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 using SimpleSQL;
 using System.Linq;
+using UnityEngine.UI;
 
 public class QuizGameHandler : MonoBehaviour
 {
@@ -14,9 +15,14 @@ public class QuizGameHandler : MonoBehaviour
     private AudioSource audioSource;
     public GameObject loadingbar;
     public CustomLoader loader;
+    [SerializeField] private int gameid=6;
+    private Sprite GameSprite;
+    public GameObject GameMainpage;
     private void Awake()
     {
         audioSource = Camera.main.gameObject.GetComponent<AudioSource>();
+        var GameImage = dbmanager.Table<GameListDetails>().FirstOrDefault(a => a.GameId == gameid).BackgroundImgURL;
+        StartCoroutine(GameBackgroundImageTask(GameImage));
         StartCoroutine(getSoundData());
     }
 
@@ -90,5 +96,12 @@ public class QuizGameHandler : MonoBehaviour
 
         loader.Isdone = true;
         GameGuide.SetActive(true);
+    }
+    IEnumerator GameBackgroundImageTask(string Imageurl)
+    {
+        yield return new WaitForSeconds(0.05f);
+        GameSprite = GetAvatarSprite(Imageurl, "Background");
+        GameMainpage.GetComponent<Image>().sprite = GameSprite;
+
     }
 }

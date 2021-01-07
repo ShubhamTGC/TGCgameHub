@@ -13,5 +13,8 @@ public class TruckGameList
     public int WrongPoint { get; set; }
     public int ScoreId { get; set; }
     public int TruckId { get; set; }
+    public string TruckImgUrl { get; set; }
+    public string CapsuleImgUrl { get; set; }
+    public string CenterImgUrl { get; set; }
 
 }

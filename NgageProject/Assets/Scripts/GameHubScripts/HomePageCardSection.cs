@@ -7,6 +7,8 @@ using System.Linq;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using m2ostnextservice.Models;
+using System;
+using UnityEngine.Networking;
 
 public class HomePageCardSection : MonoBehaviour
 {
@@ -25,12 +27,16 @@ public class HomePageCardSection : MonoBehaviour
     public GameObject TargetObj,SideBar,Sidepanel;
     public Text Appversion;
     public GameObject Exitpage;
-    public GameObject Settingpage, RewardPage;
+    public GameObject Settingpage, RewardPage,HomeCardView;
     public Text userScore;
     public GameObject LeaderBoard;
     [HideInInspector]public int Uservalue;
+    [HideInInspector] public int OpeningBalance;
     public List<GameObject> PreviewCards;
     public List<Text> Gamenames;
+    public GameObject ErrorPage;
+    public Text ErrorBox;
+    public PassBookHandler passbookbalance;
     private void Awake()
     {
         
@@ -82,23 +88,78 @@ public class HomePageCardSection : MonoBehaviour
     IEnumerator GetOverAllScore()
     {
         string HittingUrl = $"{MainUrls.BaseUrl}{MainUrls.OverallScore}?UID={PlayerPrefs.GetInt("UID")}&OrgID={PlayerPrefs.GetInt("OID")}";
-        WWW zone_www = new WWW(HittingUrl);
-        yield return zone_www;
-        if (zone_www.text != null)
+        //WWW zone_www = new WWW(HittingUrl);
+        //yield return zone_www;
+        //if (zone_www.text != null)
+        //{
+        //    Debug.Log("Log " + zone_www.text);
+        //    string ResponseLog = zone_www.text.TrimStart('"').TrimEnd('"');
+        //    AESAlgorithm aes = new AESAlgorithm();
+        //    string decryptedLog = aes.getDecryptedString(ResponseLog);
+        //    Debug.Log("Log " + decryptedLog);
+        //    if (decryptedLog != "[]")
+        //    {
+        //        List<OverallScoreModel> Model = Newtonsoft.Json.JsonConvert.DeserializeObject<List<OverallScoreModel>>(decryptedLog);
+        //        userScore.text = Model[0].score.ToString();
+        //        Uservalue = Model[0].score.GetValueOrDefault(0);
+        //        PlayerPrefs.SetInt("Percentile", Model[0].Percentiles);
+        //        OpeningBalance = Model[0].coins;
+        //        passbookbalance.InitialBalance = Model[0].OpeningBalance;
+        //        PlayerPrefs.SetString("coin", Model[0].coins.ToString());
+
+        //    }
+
+        //}
+        //else
+        //{
+        //    Debug.Log("isseu " + zone_www.text);
+        //    string msg = "Something went wrong!";
+        //    ShowErrorBox(msg);
+        //}
+
+        using (UnityWebRequest Request = UnityWebRequest.Get(HittingUrl))
         {
-            Debug.Log("Log " + zone_www.text);
-            string ResponseLog = zone_www.text.TrimStart('"').TrimEnd('"');
-            AESAlgorithm aes = new AESAlgorithm();
-            string decryptedLog = aes.getDecryptedString(ResponseLog);
-            Debug.Log("Log " + decryptedLog);
-            List<OverallScoreModel> Model = Newtonsoft.Json.JsonConvert.DeserializeObject<List<OverallScoreModel>>(decryptedLog);
-            userScore.text =  Model[0].score.ToString();
-            Uservalue =  Model[0].score.GetValueOrDefault(0);
-            PlayerPrefs.SetInt("Percentile", Model[0].Percentiles);
-        }
-        else
-        {
-            Debug.Log("isseu "+zone_www.text);
+            Request.method = UnityWebRequest.kHttpVerbGET;
+            Request.SetRequestHeader("Content-Type", "application/json");
+            Request.SetRequestHeader("Accept", "application/json");
+            yield return Request.SendWebRequest();
+            if (!Request.isNetworkError && !Request.isHttpError)
+            {
+                if (Request.responseCode.Equals(200))
+                {
+                    if (Request.downloadHandler.text != null)
+                    {
+                        Debug.Log("Log " + Request.downloadHandler.text);
+                        string ResponseLog = Request.downloadHandler.text.TrimStart('"').TrimEnd('"');
+                        AESAlgorithm aes = new AESAlgorithm();
+                        string decryptedLog = aes.getDecryptedString(ResponseLog);
+                        Debug.Log("Log " + decryptedLog);
+                        if (decryptedLog != "[]")
+                        {
+                            List<OverallScoreModel> Model = Newtonsoft.Json.JsonConvert.DeserializeObject<List<OverallScoreModel>>(decryptedLog);
+                            userScore.text = Model[0].score.ToString();
+                            Uservalue = Model[0].score.GetValueOrDefault(0);
+                            PlayerPrefs.SetInt("Percentile", Model[0].Percentiles);
+                            OpeningBalance = Model[0].coins;
+                            passbookbalance.InitialBalance = Model[0].OpeningBalance;
+                            PlayerPrefs.SetString("coin", Model[0].coins.ToString());
+
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.Log("isseu " + Request.downloadHandler.text);
+                    string msg = "Something went wrong!";
+                    ShowErrorBox(msg);
+                }
+            }
+            else
+            {
+                Debug.Log("isseu " + Request.downloadHandler.text);
+                string msg = "Something went wrong!";
+                ShowErrorBox(msg);
+            }
         }
     }
     IEnumerator AvatarSelection()
@@ -236,6 +297,7 @@ public class HomePageCardSection : MonoBehaviour
     public void ShowRewardspage()
     {
         ShowSideCard();
+        HomeCardView.SetActive(false);
         RewardPage.SetActive(true);
     }
 
@@ -255,5 +317,11 @@ public class HomePageCardSection : MonoBehaviour
     {
         ShowSideCard();
         Application.OpenURL("https://www.thegamificationcompany.com/");
+    }
+
+    public void ShowErrorBox(string msg)
+    {
+        ErrorBox.text = msg;
+        ErrorPage.SetActive(true);
     }
 }

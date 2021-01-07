@@ -4,6 +4,7 @@ using UnityEngine;
 using SimpleSQL;
 using System.IO;
 using System.Linq;
+using UnityEngine.UI;
 
 public class AnagramGame : MonoBehaviour
 {
@@ -14,8 +15,9 @@ public class AnagramGame : MonoBehaviour
     public GameLeaderBoardScript GameLb;
     public GameObject loadingbar;
     public CustomLoader loader;
-
-
+    [SerializeField]private int gameid =2;
+    public GameObject Gamepage;
+    private Sprite Gamebgsprite;
     private AudioSource audioSource;
     private void Awake()
     {
@@ -26,7 +28,8 @@ public class AnagramGame : MonoBehaviour
 
     IEnumerator getSoundData()
     {
-
+        var GameImage = dbmanager.Table<GameListDetails>().FirstOrDefault(a => a.GameId == 2).BackgroundImgURL;
+        StartCoroutine(GameBackgroundImageTask(GameImage));
         var soundLog = dbmanager.Table<SettingPage>().FirstOrDefault();
         if (soundLog != null)
         {
@@ -36,6 +39,7 @@ public class AnagramGame : MonoBehaviour
         {
             audioSource.volume = 0.5f;
         }
+
         yield return new WaitForSeconds(0.1f);
     }
     void Start()
@@ -123,5 +127,11 @@ public class AnagramGame : MonoBehaviour
 
     }
 
+    IEnumerator GameBackgroundImageTask(string Imageurl)
+    {
+        yield return new WaitForSeconds(0.05f);
+        Gamebgsprite = GetAvatarSprite(Imageurl, "Background");
+        Gamepage.GetComponent<Image>().sprite = Gamebgsprite;
+    }
 
 }

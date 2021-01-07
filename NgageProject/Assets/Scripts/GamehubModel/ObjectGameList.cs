@@ -10,4 +10,9 @@ public class ObjectGameList
     public int CorrectPoint { get; set; }
     public int WrongPoint { get; set; }
     public int CompletionScore { get; set; }
+    public string ObjItemZoomImgURL { get; set; }
+    public string BarrelName { get; set; }
+    public string DustbinImgURL { get; set; }
+    public string ObjItemImgURL { get; set; }
+
 }

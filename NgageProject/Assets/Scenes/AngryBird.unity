@@ -5091,6 +5091,50 @@ Transform:
   m_Father: {fileID: 1696595797}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &455856173
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 455856175}
+  - component: {fileID: 455856174}
+  m_Layer: 0
+  m_Name: SafeArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &455856174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455856173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dd219ac2bff62648a6ae1c651c2eb5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeySafeArea: 278
+--- !u!4 &455856175
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455856173}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &469080942
 GameObject:
   m_ObjectHideFlags: 0
@@ -6451,7 +6495,7 @@ MonoBehaviour:
   Dotparent: {fileID: 0}
   MudInWater: {fileID: 33971128}
   MudInWater2: {fileID: 141452284}
-  LevelRoomid: 9
+  LevelRoomid: 0
   ObjectName: []
   Cscore: 
   Wscore: 
@@ -6471,6 +6515,8 @@ MonoBehaviour:
   closepause: {fileID: 1312584556}
   id_game: 3
   randomindex: 
+  StageImageData: {fileID: 1198109464}
+  ObjectSpite: []
 --- !u!1 &572415630
 GameObject:
   m_ObjectHideFlags: 0
@@ -6621,7 +6667,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: -1
   m_SortingLayerID: 0
   m_SortingOrder: 7
   m_TargetDisplay: 0
@@ -12792,6 +12838,10 @@ MonoBehaviour:
   dbmanager: {fileID: 2041713216}
   loadingbar: {fileID: 1641510135}
   Laoder: {fileID: 1641510137}
+  Gameid: 3
+  GameLevelhandlers:
+  - {fileID: 1900299209}
+  - {fileID: 570412621}
 --- !u!4 &1198109465
 Transform:
   m_ObjectHideFlags: 0
@@ -14324,8 +14374,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 108916967
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 84c7c25bd260747be85456fa9c48c4b0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -14918,8 +14968,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 108916967
+  m_SortingLayer: 1
   m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: b24d8371c5d8d4523bb53376999757c3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -18850,7 +18900,7 @@ MonoBehaviour:
   Dotparent: {fileID: 1850998436}
   MudInWater: {fileID: 187584506}
   MudInWater2: {fileID: 1890087719}
-  LevelRoomid: 4
+  LevelRoomid: 0
   ObjectName: []
   Cscore: 
   Wscore: 
@@ -18869,6 +18919,8 @@ MonoBehaviour:
   closepause: {fileID: 1312584556}
   id_game: 3
   randomindex: 
+  StageImageData: {fileID: 1198109464}
+  ObjectSpite: []
 --- !u!4 &1900299210
 Transform:
   m_ObjectHideFlags: 0

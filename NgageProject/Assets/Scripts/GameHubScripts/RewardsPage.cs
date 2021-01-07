@@ -10,13 +10,17 @@ public class RewardsPage : MonoBehaviour
     public List<GameObject> Pages;
     public Text UserScore;
     public HomePageCardSection Homepage;
+    public PassBookHandler PassbookPage;
+    public ScratchCardHistoryPage ScratchCardPage;
+    public CouponsPageHandler CouponPage;
     void Start()
     {
         
     }
     private void OnEnable()
     {
-        UserScore.text = Homepage.Uservalue.ToString();
+        UserScore.text = Homepage.OpeningBalance.ToString();
+        //PassbookPage.InitialBalance = Homepage.OpeningBalance;
         for (int a = 0; a < Tabs.Count; a++)
         {
             if (a == 0)
@@ -55,5 +59,14 @@ public class RewardsPage : MonoBehaviour
             c.SetActive(c.name.Equals(tabs.name, System.StringComparison.OrdinalIgnoreCase));
         });
 
+    }
+
+
+    public void ClosePage()
+    {
+        PassbookPage.ResetPage();
+        ScratchCardPage.ResetPage();
+        CouponPage.ResetPage();
+        this.gameObject.SetActive(false);
     }
 }

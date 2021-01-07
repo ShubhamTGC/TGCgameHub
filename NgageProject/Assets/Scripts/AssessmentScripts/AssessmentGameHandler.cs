@@ -191,7 +191,7 @@ public class AssessmentGameHandler : MonoBehaviour
             });
             TimerBool = true;
             StartCoroutine(Dottimer());
-            QuestionBar.text = "Q"+ (QuestionCounter +1).ToString() +"." + QuestionForUser[QuestionCounter];
+            QuestionBar.text = "Q"+ (QuestionCounter +1).ToString() +". " + QuestionForUser[QuestionCounter];
             string[] Ansoption = OptionsForUser[QuestionCounter].Split("@"[0]);
         
             System.Random rnd = new System.Random();
@@ -201,9 +201,9 @@ public class AssessmentGameHandler : MonoBehaviour
             {
                 if (MyRandomArray[a] == CorrectAnsForUser[QuestionCounter])
                 {
-                    correctans = (a + 1).ToString() + "." + MyRandomArray[a];
+                    correctans = (a + 1).ToString() + "). " + MyRandomArray[a];
                 }
-                Buttons[a].gameObject.transform.GetChild(0).gameObject.GetComponent<Text>().text = (a+1).ToString()+ "."+ MyRandomArray[a];
+                Buttons[a].gameObject.transform.GetChild(0).gameObject.GetComponent<Text>().text = (a+1).ToString()+ "). "+ MyRandomArray[a];
             }
             Buttons.ForEach(x =>
             {

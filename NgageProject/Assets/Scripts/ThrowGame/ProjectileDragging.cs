@@ -50,6 +50,7 @@ public class ProjectileDragging : MonoBehaviour
 
     private void OnEnable()
     {
+        this.gameObject.GetComponent<CircleCollider2D>().enabled = false;
         collide = false;
         throwwaste = FindObjectOfType<ThrowWasteHandler>();
         StartCoroutine(initailsetup());
@@ -75,6 +76,7 @@ public class ProjectileDragging : MonoBehaviour
         maxStretchSqr = maxStretch * maxStretch;
         circleRadius = circle.radius;
         LineRendererSetup();
+        this.gameObject.GetComponent<CircleCollider2D>().enabled = true;
 
     }
     void Update()
@@ -104,9 +106,9 @@ public class ProjectileDragging : MonoBehaviour
         catapultLineBack.SetPosition(0, catapultLineBack.transform.position);
 
         //catapultLineFront.sortingLayerName = "Foreground";
-        //catapultLineBack.sortingLayerName = "Foreground";
+       // catapultLineBack.sortingLayerName = "Foreground";
         catapultLineFront.sortingLayerName = "Default";
-        catapultLineBack.sortingLayerName = "Default";
+       catapultLineBack.sortingLayerName = "Default";
 
         catapultLineFront.sortingOrder = 3;
         catapultLineBack.sortingOrder = 1;

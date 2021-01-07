@@ -58,6 +58,7 @@ public class ThrowWasteHandler : MonoBehaviour
     public Text Gamestaus;
     public List<Sprite> paper, glass, biohazard, ewaste, plastic, organic, metal;
     private List<KeyValuePair<string, List<Sprite>>> WasteCollectionList;
+    private List<KeyValuePair<string, List<string>>> collectedData = new List<KeyValuePair<string, List<string>>>();
     public GameObject ScoreKnob;
     [SerializeField]
     private int TotalGameScore;
@@ -129,6 +130,8 @@ public class ThrowWasteHandler : MonoBehaviour
     private HomePageScript Homeinstance;
     [SerializeField] private int id_game;
    [SerializeField] private List<int> randomindex = new List<int>();
+    public Stage2Controller StageImageData;
+    [SerializeField] private List<Sprite> ObjectSpite = new List<Sprite>();
     private void Awake()
     {
 
@@ -192,18 +195,26 @@ public class ThrowWasteHandler : MonoBehaviour
     }
     void initialsetup()
     {
-       
+
+        var ListLog = StageImageData.Imagedata.FirstOrDefault(i => i.Key == LevelRoomid.ToString()).Value;
+        ObjectSpite = ListLog;
         MudInWater.SetActive(false);
         MudInWater2.SetActive(false);
         ScoreKnob.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 0);
         helpingbool = true;
         
         gameend  = false;
+        WasteObejctSprites = new Sprite[ObjectSpite.Count];
         timerPanelPos = TimerPanel.GetComponent<RectTransform>().localPosition;
-        WasteObejctSprites = Resources.LoadAll<Sprite>(wasteImagePath);
-      
+        //WasteObejctSprites = Resources.LoadAll<Sprite>(wasteImagePath);
+        for(int a = 0; a < ObjectSpite.Count; a++)
+        {
+            WasteObejctSprites[a] = ObjectSpite[a];
+        }
+        //WasteObejctSprites = ObjectSpite;
+        var ObjectListdbSet = dbmanager.Table<ObjectGameList>().ToList();
         StartCoroutine(GetObjectdata());
-      
+        collectedData = ObjectListdbSet.Where(x=> !string.IsNullOrEmpty(x.DustbinImgURL)).GroupBy(x => x.DustbinImgURL).Select(x => new KeyValuePair<string, List<string>>(x.Key, x.Select(y => y.ItemName).ToList())).ToList();
         WasteCollectionList = new List<KeyValuePair<string, List<Sprite>>>()
         {
             new KeyValuePair<string, List<Sprite>>("Paper", paper),
@@ -214,7 +225,7 @@ public class ThrowWasteHandler : MonoBehaviour
             new KeyValuePair<string, List<Sprite>>("organic", organic),
             new KeyValuePair<string, List<Sprite>>("metal", metal)
         };
-       
+
         Totalwaste.text = "0 / " + totalwasteCount.ToString();
         //CorrectGuesscount.text = "0";
         LevelObjects = new List<Sprite>(WasteObejctSprites.Length);
@@ -342,27 +353,6 @@ public class ThrowWasteHandler : MonoBehaviour
 
         if (!gameclose)
         {
-            //if (LeaderBoard.activeInHierarchy || SettingPage.activeInHierarchy || overallDashboard.activeInHierarchy || GreenJurnal.activeInHierarchy)
-            //{
-            //    TimePaused = true;
-            //    ForntLine.enabled = false;
-            //    BackLine.enabled = false;
-            //    DustbinsObj.ForEach(x =>
-            //    {
-            //        x.GetComponent<BoxCollider2D>().enabled = false;
-            //    });
-            //}
-            //else
-            //{
-            //    TimePaused = false;
-            //    ForntLine.enabled = true;
-            //    BackLine.enabled = true;
-            //    DustbinsObj.ForEach(x =>
-            //    {
-            //        x.GetComponent<BoxCollider2D>().enabled = true;
-            //    });
-
-            //}
             ThrowWasteObjectactiveStatus();
         }
 
@@ -495,8 +485,9 @@ public class ThrowWasteHandler : MonoBehaviour
             PlayerObjectId1.Add(ItemId[objectindex]);
             if (dustbin != "wall")
             {
-                var CollidedDustbin = WasteCollectionList.FirstOrDefault(x => x.Key.Equals(dustbin, System.StringComparison.OrdinalIgnoreCase));
-                var iscorrectWaste = CollidedDustbin.Value.Any(x => x.name.Equals(collidername, System.StringComparison.OrdinalIgnoreCase));
+                //var CollidedDustbin = WasteCollectionList.FirstOrDefault(x => x.Key.Equals(dustbin, System.StringComparison.OrdinalIgnoreCase));
+                var CollidedDustbin = collectedData.FirstOrDefault(x => x.Key.Equals(dustbin, System.StringComparison.OrdinalIgnoreCase));
+                var iscorrectWaste = CollidedDustbin.Value.Any(x => x.Equals(collidername, System.StringComparison.OrdinalIgnoreCase));
              
                 if (iscorrectWaste)
                 {
@@ -515,8 +506,8 @@ public class ThrowWasteHandler : MonoBehaviour
                 else
                 {
                     
-                    var RelatedDustbin = (from k in WasteCollectionList
-                                            where k.Value.Any(x => x.name.Equals(collidername, System.StringComparison.OrdinalIgnoreCase))
+                    var RelatedDustbin = (from k in collectedData
+                                          where k.Value.Any(x => x.Equals(collidername, System.StringComparison.OrdinalIgnoreCase))
                                             select k.Key).FirstOrDefault();
                     CorrectOption.Add(RelatedDustbin);
                     gameSound.clip = WrongAns;
@@ -557,8 +548,9 @@ public class ThrowWasteHandler : MonoBehaviour
             {
                 int objectindex = ObjectName.FindIndex(x => x.Equals(collidername, System.StringComparison.OrdinalIgnoreCase));
                 PlayerObjectId2.Add(ItemId[objectindex]);
-                var CollidedDustbin = WasteCollectionList.FirstOrDefault(x => x.Key.Equals(dustbin, System.StringComparison.OrdinalIgnoreCase));
-                var iscorrectWaste = CollidedDustbin.Value.Any(x => x.name.Equals(collidername, System.StringComparison.OrdinalIgnoreCase));
+               // var CollidedDustbin = WasteCollectionList.FirstOrDefault(x => x.Key.Equals(dustbin, System.StringComparison.OrdinalIgnoreCase));
+                var CollidedDustbin = collectedData.FirstOrDefault(x => x.Key.Equals(dustbin, System.StringComparison.OrdinalIgnoreCase));
+                var iscorrectWaste = CollidedDustbin.Value.Any(x => x.Equals(collidername, System.StringComparison.OrdinalIgnoreCase));
 
                 if (iscorrectWaste)
                 {
@@ -577,8 +569,8 @@ public class ThrowWasteHandler : MonoBehaviour
                 else
                 {
 
-                    var RelatedDustbin = (from k in WasteCollectionList
-                                            where k.Value.Any(x => x.name.Equals(collidername, System.StringComparison.OrdinalIgnoreCase))
+                    var RelatedDustbin = (from k in collectedData
+                                          where k.Value.Any(x => x.Equals(collidername, System.StringComparison.OrdinalIgnoreCase))
                                             select k.Key).FirstOrDefault();
                     CorrectOptionL2.Add(RelatedDustbin);
                     gameSound.clip = WrongAns;
@@ -610,9 +602,6 @@ public class ThrowWasteHandler : MonoBehaviour
             Totalwaste.text = correctGoal.ToString() + " / " + totalwasteCount.ToString();
             ItemColletedL2.Add(collidername);
         }
-        
-    
-        
     }
 
     IEnumerator WrongObjectTask(string ObjectName)
@@ -626,7 +615,6 @@ public class ThrowWasteHandler : MonoBehaviour
                x.gameObject.SetActive(true);
                wrongeffect.SetActive(true);
             }
-           
         });
         if(wrongans == 2)
         {
@@ -642,8 +630,8 @@ public class ThrowWasteHandler : MonoBehaviour
         {
             HighSmoke.SetActive(true);
         }
-
     }
+
     IEnumerator resetEffect(GameObject dustbinobj)
     {
         yield return new WaitForSeconds(1f);
@@ -655,13 +643,7 @@ public class ThrowWasteHandler : MonoBehaviour
     {
         TimePaused = true;
         Pausepage.SetActive(true);
-        //Previewimage1.GetComponentInParent<BoxCollider2D>().enabled = false;
-        //Previewimage2.GetComponentInParent<BoxCollider2D>().enabled = false;
-        //Previewimage3.GetComponentInParent<BoxCollider2D>().enabled = false;
-        //Previewimage4.GetComponentInParent<BoxCollider2D>().enabled = false;
-        //closeGame = true;
-        //gameclose = true;
-        //StartCoroutine(CloserGame());
+     
     }
     
     public IEnumerator destoryObj()

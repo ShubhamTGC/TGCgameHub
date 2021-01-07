@@ -14,6 +14,7 @@ public class ScratchCardHistoryHandler : MonoBehaviour
     private int CardID;
     private bool scratched;
     public GameObject cardPanelpage;
+    public ScratchCardHistoryPage Cardmainepage;
     void Start()
     {
 
@@ -21,7 +22,7 @@ public class ScratchCardHistoryHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        CardID = int.Parse(this.gameObject.transform.parent.name);
+       
         isPressed = false;
         scratched = false;
     }
@@ -68,39 +69,41 @@ public class ScratchCardHistoryHandler : MonoBehaviour
 
     IEnumerator PostCardData()
     {
+        yield return new WaitForSeconds(0.1f);
         scratched = true;
+        CardID = int.Parse(this.gameObject.transform.parent.name);
         Debug.Log("card id " + CardID);
         string HittingUrl = $"{MainUrls.BaseUrl}{MainUrls.PostCardID}?Id={CardID}";
+        StartCoroutine(CloseCardpageTask());
 
+        //using (UnityWebRequest Request = UnityWebRequest.Get(HittingUrl))
+        //{
+        //    Request.method = UnityWebRequest.kHttpVerbPOST;
+        //    Request.SetRequestHeader("Content-Type", "application/json");
+        //    Request.SetRequestHeader("Accept", "application/json");
+        //    yield return Request.SendWebRequest();
+        //    if (!Request.isNetworkError && !Request.isHttpError)
+        //    {
+        //        if (Request.responseCode.Equals(200))
+        //        {
+        //            if (Request.downloadHandler.text != null)
+        //            {
+        //                Debug.Log("response" + Request.downloadHandler.text);
+        //                yield return new WaitForSeconds(0.4f);
+        //                StartCoroutine(CloseCardpageTask());
 
-        using (UnityWebRequest Request = UnityWebRequest.Get(HittingUrl))
-        {
-            Request.method = UnityWebRequest.kHttpVerbPOST;
-            Request.SetRequestHeader("Content-Type", "application/json");
-            Request.SetRequestHeader("Accept", "application/json");
-            yield return Request.SendWebRequest();
-            if (!Request.isNetworkError && !Request.isHttpError)
-            {
-                if (Request.responseCode.Equals(200))
-                {
-                    if (Request.downloadHandler.text != null)
-                    {
-                        Debug.Log("response" + Request.downloadHandler.text);
-                        yield return new WaitForSeconds(0.4f);
-                        StartCoroutine(CloseCardpageTask());
-
-                    }
-                }
-                else
-                {
-                    Debug.Log("Problem " + Request.downloadHandler.text);
-                }
-            }
-            else
-            {
-                Debug.Log("Problem " + Request.downloadHandler.text);
-            }
-        }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Debug.Log("Problem " + Request.downloadHandler.text);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("Problem " + Request.downloadHandler.text);
+        //    }
+        //}
     }
 
 
@@ -110,6 +113,7 @@ public class ScratchCardHistoryHandler : MonoBehaviour
         iTween.ScaleTo(this.gameObject, Vector3.zero, 0.2f);
         yield return new WaitForSeconds(0.3f);
         cardPanelpage.SetActive(false);
+        Cardmainepage.CardSractched(CardID);
         Destroy(this.gameObject);
     }
 }

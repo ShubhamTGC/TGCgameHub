@@ -12,6 +12,10 @@ public class GameListDetails
     public int CompletePer { get; set; }
     public string RoundImageUrl { get; set; }
     public string RectImageUrl { get; set; }
+    public string BackgroundImgURL { get; set; }
+    public string Level1ImgURl { get; set; }
+    public string Level2ImgURl { get; set; }
+
 
 
 }

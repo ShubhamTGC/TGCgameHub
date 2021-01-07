@@ -22,7 +22,8 @@ public class RegistrationPageHandler : MonoBehaviour
     private AESAlgorithm aes;
     public GameObject Registerpage, Loginpage, MainLoginPage, startPage;
     public Scrollbar Formpage;
-
+    public Button Hidepasswordbtn, HideConfmpasswordbtn;
+    public Sprite Closeeye, Openeye;
     void Start()
     {
         
@@ -180,6 +181,37 @@ public class RegistrationPageHandler : MonoBehaviour
                 string msg = "Invaild email id or password!";
                 StartCoroutine(ShowPopUp(msg, sad));
             }
+        }
+    }
+
+    public void Showpassword()
+    {
+        if (Hidepasswordbtn.image.sprite.name.Equals("closeeye", System.StringComparison.OrdinalIgnoreCase))
+        {
+            Hidepasswordbtn.image.sprite = Openeye;
+            Password.inputType = InputField.InputType.Standard;
+            Password.ForceLabelUpdate();
+        }
+        else
+        {
+            Hidepasswordbtn.image.sprite = Closeeye;
+            Password.inputType = InputField.InputType.Password;
+            Password.ForceLabelUpdate();
+        }
+    }
+    public void ShowConfrmpassword()
+    {
+        if (HideConfmpasswordbtn.image.sprite.name.Equals("closeeye", System.StringComparison.OrdinalIgnoreCase))
+        {
+            HideConfmpasswordbtn.image.sprite = Openeye;
+            ConfirmPassword.inputType = InputField.InputType.Standard;
+            ConfirmPassword.ForceLabelUpdate();
+        }
+        else
+        {
+            HideConfmpasswordbtn.image.sprite = Closeeye;
+            ConfirmPassword.inputType = InputField.InputType.Password;
+            ConfirmPassword.ForceLabelUpdate();
         }
     }
 

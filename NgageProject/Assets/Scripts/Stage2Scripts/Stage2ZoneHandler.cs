@@ -78,8 +78,13 @@ public class Stage2ZoneHandler : MonoBehaviour
     {
         
     }
+    private void Awake()
+    {
+      
 
-     void OnEnable()
+    }
+
+    void OnEnable()
     {
         IsPassed = false;
         homeinstance = HomePageScript.Homepage;

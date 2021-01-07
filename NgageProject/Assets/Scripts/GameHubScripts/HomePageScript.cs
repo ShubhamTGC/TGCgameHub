@@ -46,15 +46,28 @@ public class HomePageScript : MonoBehaviour
     private string MatchTheTileLoactionFolder = "MatchTheTileGameLocation";
     private string RoundimagePreviewFolder = "RoundPreview";
     private string RectImagepreviewFolder = "RectPreview";
+    private string GameBackgroundImageFolder = "BackgroundImages";
+    private string Level1ImageFolder = "Level1Images";
+    private string Level2ImageFolder = "Level2Images";
+    private string ABimage = "ABGameImage";
+    private string TruckGameImage = "TruckGame";
     private List<string> FlagUrl = new List<string>(), LocationUrl = new List<string>();
     private List<int> LocationId = new List<int>(), FlagID = new List<int>();
     private List<int> RectImageId = new List<int>(), RoundimageId = new List<int>();
     private List<string> RectImageUrl = new List<string>(), RoundImageUrl = new List<string>();
+    private List<int> BGimageid = new List<int>();
+    private List<string> BGImageUrl = new List<string>();
+    private List<string> Level1ImageUrl = new List<string>();
+    private List<string> Level2ImageUrl = new List<string>();
+    private List<string> ObjectName = new List<string>();
+    private List<string> ObjectUrl = new List<string>(),truckObjName = new List<string>(),TruckObjUrl = new List<string>();
 
     public GameObject LogOutpage;
     public GameObject AppupdatePage;
     private bool GoogleLogin;
     public GameObject ExitButton;
+    public GameObject ErrorPage;
+    public Text ErrorBox;
 
     public void Awake()
     {
@@ -67,8 +80,12 @@ public class HomePageScript : MonoBehaviour
         var GameSetting = dbmanager.Table<SettingPage>().FirstOrDefault();
         AudioSource audioSource = Camera.main.gameObject.GetComponent<AudioSource>();
         audioSource.volume = GameSetting != null ? GameSetting.Music : 1;
-   
-        
+    }
+
+    public void ShowErrorBox(string msg)
+    {
+        ErrorBox.text = msg;
+        ErrorPage.SetActive(true);
     }
 
     IEnumerator GetAppVersion()
@@ -130,7 +147,7 @@ public class HomePageScript : MonoBehaviour
     IEnumerator GetuserAvatar()
     {
         
-        string HittingUrl = $"{MainUrls.BaseUrl}{MainUrls.GetavatarPicApi}";
+        string HittingUrl = $"{MainUrls.BaseUrl}{MainUrls.GetavatarPicApi}?OrgID={PlayerPrefs.GetInt("OID")}";
         WWW AvatarLog = new WWW(HittingUrl);
         yield return AvatarLog;
         if (AvatarLog.text != null)
@@ -150,7 +167,7 @@ public class HomePageScript : MonoBehaviour
             for (int a = 0; a < Urls.Count; a++)
             {
                 yield return new WaitForSeconds(0.2f);
-                StartCoroutine(GetTexture(Ids[a], Urls[a], AvatarDir));
+                StartCoroutine(GetTexture(Ids[a].ToString(), Urls[a], AvatarDir));
             }
 
             if (GoogleLogin)
@@ -165,57 +182,61 @@ public class HomePageScript : MonoBehaviour
         }
     }
 
-    IEnumerator GetTexture(int id, string Url,string dirname)
+    IEnumerator GetTexture(string id, string Url,string dirname)
     {
-        Debug.Log("running");
-        UnityWebRequest www = UnityWebRequestTexture.GetTexture(Url, true);
-        yield return www.SendWebRequest();
-        if (www.isNetworkError || www.isHttpError)
+        if(Url != null)
         {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            try
+            Debug.Log("running");
+            UnityWebRequest www = UnityWebRequestTexture.GetTexture(Url, true);
+            yield return www.SendWebRequest();
+            if (www.isNetworkError || www.isHttpError)
             {
-                Texture2D texture2d = new Texture2D(1, 1);
-                Sprite sprite = null;
-
-                if (www.isDone)
+                Debug.Log(www.error);
+            }
+            else
+            {
+                try
                 {
-                    if (texture2d.LoadImage(www.downloadHandler.data))
+                    Texture2D texture2d = new Texture2D(1, 1);
+                    Sprite sprite = null;
+
+                    if (www.isDone)
                     {
-                        var dirpath = UnityEngine.Application.persistentDataPath + "/"+ dirname;
-                        if (!Directory.Exists(dirpath))
+                        if (texture2d.LoadImage(www.downloadHandler.data))
                         {
-                            Directory.CreateDirectory(dirpath);
-                            if (Directory.Exists(dirpath))
+                            var dirpath = UnityEngine.Application.persistentDataPath + "/" + dirname;
+                            if (!Directory.Exists(dirpath))
+                            {
+                                Directory.CreateDirectory(dirpath);
+                                if (Directory.Exists(dirpath))
+                                {
+                                    dirpath = dirpath + "/" + id + ".png";
+                                    byte[] bytes = texture2d.EncodeToPNG();
+                                    File.WriteAllBytes(dirpath, bytes);
+                                    Debug.Log("File saved " + dirpath);
+                                }
+                            }
+                            else
                             {
                                 dirpath = dirpath + "/" + id.ToString() + ".png";
                                 byte[] bytes = texture2d.EncodeToPNG();
-                                File.WriteAllBytes(dirpath,bytes);
+                                File.WriteAllBytes(dirpath, bytes);
                                 Debug.Log("File saved " + dirpath);
                             }
                         }
-                        else
-                        {
-                            dirpath = dirpath + "/" + id.ToString() + ".png";
-                            byte[] bytes = texture2d.EncodeToPNG();
-                            File.WriteAllBytes(dirpath, bytes);
-                            Debug.Log("File saved " + dirpath);
-                        }
+                    }
+                    else
+                    {
+                        Debug.Log("running");
                     }
                 }
-                else
+                catch (Exception e)
                 {
-                    Debug.Log("running");
+                    Debug.Log(e);
                 }
             }
-            catch (Exception e)
-            {
-                Debug.Log(e);
-            }
         }
+       
     }
 
 
@@ -242,7 +263,7 @@ public class HomePageScript : MonoBehaviour
             
         }
         DontDestroyOnLoad(Homepage);
-        StartCoroutine(GetPercentiledata());
+       
     }
 
     IEnumerator GetPercentiledata()
@@ -284,7 +305,25 @@ public class HomePageScript : MonoBehaviour
                             }
                         });
                     }
+                    else
+                    {
+                        string msg = "Something went wrong!";
+                        Debug.Log("null data here  1" + Request.downloadHandler.text);
+                        //ShowErrorBox(msg);
+                    }
                 }
+                else
+                {
+                    string msg = "Something went wrong!";
+                    // ShowErrorBox(msg);
+                    Debug.Log("null data here  2" + Request.downloadHandler.text);
+                }
+            }
+            else
+            {
+                string msg = "Please check your internet connection!";
+                //ShowErrorBox(msg);
+                Debug.Log("null data here  3" + Request.downloadHandler.text);
             }
         }
     }
@@ -429,6 +468,7 @@ public class HomePageScript : MonoBehaviour
                             LoginResModel LoginLog = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginResModel>(response);
                             PlayerPrefs.SetInt("UID", LoginLog.Id_User);
                             PlayerPrefs.SetInt("OID", LoginLog.ID_ORGANIZATION);
+                            PlayerPrefs.SetString("Username", LoginLog.Name);
                             string msg = "Logged in Successfully!!!";
                             ExitButton.SetActive(false);
                             StartCoroutine(ShowPopUp(msg,happy));
@@ -472,8 +512,8 @@ public class HomePageScript : MonoBehaviour
                             DownloadDone = false;
                             Loadingpage.SetActive(true);
                             StartCoroutine(GetGameDetailsProcess());
-                            
-                            
+                            StartCoroutine(GetPercentiledata());
+
                         }
                     }
                 }
@@ -560,6 +600,7 @@ public class HomePageScript : MonoBehaviour
                             LoginResModel LoginLog = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginResModel>(response);
                             PlayerPrefs.SetInt("UID", LoginLog.Id_User);
                             PlayerPrefs.SetInt("OID", LoginLog.ID_ORGANIZATION);
+                            PlayerPrefs.SetString("Username", LoginLog.Name);
                             int avatarid = Convert.ToInt32(LoginLog.Id_Avatar != null ? LoginLog.Id_Avatar : 0);
                             PlayerPrefs.SetString("Loggedin", "true");
                             string msg = "Logged in Successfully!!!";
@@ -665,7 +706,7 @@ public class HomePageScript : MonoBehaviour
     IEnumerator GetGameDetailsProcess()
     {
         yield return new WaitForSeconds(0.1f);
-        string HittingUrl = $"{MainUrls.BaseUrl}{MainUrls.GamesetupApi}";
+        string HittingUrl = $"{MainUrls.BaseUrl}{MainUrls.GamesetupApi}?OrgID={PlayerPrefs.GetInt("OID")}";
         WWW Request = new WWW(HittingUrl);
         yield return Request;
         if(Request.text != null)
@@ -689,12 +730,18 @@ public class HomePageScript : MonoBehaviour
                 List<enemieslist> enemylist = Gamelog.enemieslist;
                 List<attacktoollist> attacktoollist = Gamelog.attacktoollist;
                 List<herelist> herolist = Gamelog.herelist;
+                List<monsterSpeedByScoreList> monsterSpeedModel = Gamelog.monsterSpeedByScoreList;
 
 
                 //Debug.Log(" gameconfig " + gameconfig.Count + " anagramconfig " + anagramconfig.Count + " Quizconfig " + Quizconfig.Count + " ObjectgameConfig : "  + ObjectgameConfig.Count + " MonsterConfig : " + MonsterConfig.Count + " TruckConfig :  " + TruckConfig.Count
                 //    + " TruckcenterConfig:  " + TruckcenterConfig.Count);
                 string RoundlocalPath = Application.persistentDataPath + "/" + RoundimagePreviewFolder;
                 string Rectlocalpath = Application.persistentDataPath + "/" + RectImagepreviewFolder;
+                string BackgroundPath = Application.persistentDataPath + "/" + GameBackgroundImageFolder;
+                string Level1Path = Application.persistentDataPath + "/" + Level1ImageFolder;
+                string Level2Path = Application.persistentDataPath + "/" + Level2ImageFolder;
+                string ABGamePath = Application.persistentDataPath + "/" + ABimage;
+                string imagepath = Application.persistentDataPath + "/" + TruckGameImage;
                 gameconfig.ForEach(x =>
                 {
                     var LocalgameConfig = dbmanager.Table<GameListDetails>().FirstOrDefault(y=> y.GameId == x.Id_Game);
@@ -708,9 +755,11 @@ public class HomePageScript : MonoBehaviour
                             GameType = x.GameType,
                             UpdateFlag = x.UpdatedFlag,
                             CompletePer = int.Parse(x.completePer),
-                            RoundImageUrl = RoundlocalPath + "/" +  x.Id_Game + ".png",
+                            RoundImageUrl = RoundlocalPath + "/" + x.Id_Game + ".png",
                             RectImageUrl = Rectlocalpath + "/" + x.Id_Game + ".png",
-
+                            BackgroundImgURL = BackgroundPath +"/" + x.Id_Game + ".png",
+                            Level1ImgURl = Level1Path + "/" +x.Id_Game +".png",
+                            Level2ImgURl = Level2Path + "/" +  x.Id_Game + ".png"
                         };
                         dbmanager.Insert(Gamedetails);
                         if (x.Id_Game == 1 )
@@ -800,7 +849,11 @@ public class HomePageScript : MonoBehaviour
                                         ItemName = c.item_Name,
                                         CorrectPoint = c.correct_point,
                                         WrongPoint = c.Wrong_point,
-                                        CompletionScore = c.Complete_Score.GetValueOrDefault(0)
+                                        CompletionScore = c.Complete_Score.GetValueOrDefault(0),
+                                        ObjItemZoomImgURL = c.ObjItemZoomImgURL,
+                                        BarrelName = c.BarrelName,
+                                        DustbinImgURL = c.DustbinImgURL,
+                                        ObjItemImgURL = ABGamePath + "/" + c.item_Name + ".png",
                                     };
                                     dbmanager.Insert(objectddata);
                                 }
@@ -813,8 +866,15 @@ public class HomePageScript : MonoBehaviour
                                     ObjectLog.CorrectPoint = c.correct_point;
                                     ObjectLog.WrongPoint = c.Wrong_point;
                                     ObjectLog.CompletionScore = c.Complete_Score.GetValueOrDefault(0);
+                                    ObjectLog.ObjItemZoomImgURL = c.ObjItemZoomImgURL;
+                                    ObjectLog.BarrelName = c.BarrelName;
+                                    ObjectLog.DustbinImgURL = c.DustbinImgURL;
+                                    ObjectLog.ObjItemImgURL = ABGamePath + "/" + c.item_Name + ".png";
                                     dbmanager.UpdateTable(ObjectLog);
                                 }
+
+                                ObjectName.Add(c.item_Name);
+                                ObjectUrl.Add(c.ObjItemImgURL);
                             });
                         }
 
@@ -883,6 +943,7 @@ public class HomePageScript : MonoBehaviour
 
                         if (x.Id_Game == 5 )
                         {
+                            
                             MonsterConfig.ForEach(m =>
                             {
                                 var monsterlog = dbmanager.Table<MonsterDetails>().FirstOrDefault(u=> u.MonsterId == m.monsterId);
@@ -892,7 +953,8 @@ public class HomePageScript : MonoBehaviour
                                     {
                                         MonsterId = m.monsterId,
                                         CatchPoint = m.catch_point,
-                                        GameId = m.Id_Game
+                                        GameId = m.Id_Game,
+                                        MonsterImgUrl = imagepath + "/"+ Path.GetFileName(m.MonsterImgURL)
                                     };
 
                                     dbmanager.Insert(monsterdata);
@@ -902,8 +964,11 @@ public class HomePageScript : MonoBehaviour
                                     monsterlog.MonsterId = m.monsterId;
                                     monsterlog.CatchPoint = m.catch_point;
                                     monsterlog.GameId = m.Id_Game;
+                                    monsterlog.MonsterImgUrl = imagepath +"/" + Path.GetFileName(m.MonsterImgURL);
                                     dbmanager.UpdateTable(monsterlog);
                                 }
+                                truckObjName.Add(Path.GetFileNameWithoutExtension(m.MonsterImgURL));
+                                TruckObjUrl.Add(m.MonsterImgURL);
                             });
                             TruckConfig.ForEach(v =>
                             {
@@ -920,7 +985,10 @@ public class HomePageScript : MonoBehaviour
                                         DustbinName = v.Dustbins_Name,
                                         CorrectPoint = v.Correct_Dustbin_Point,
                                         WrongPoint = v.Wrong_Dustbin_Point,
-                                        ScoreId = v.ScoreId
+                                        ScoreId = v.ScoreId,
+                                        TruckImgUrl = imagepath +"/" + Path.GetFileName(v.truckImg),
+                                        CapsuleImgUrl = imagepath + "/" + Path.GetFileName(v.capsuleImg),
+                                        CenterImgUrl = imagepath + "/" + Path.GetFileName(v.TheamImg)
                                     };
                                     dbmanager.Insert(TGlog);
                                 }
@@ -935,8 +1003,17 @@ public class HomePageScript : MonoBehaviour
                                     TruckGameLog.CorrectPoint = v.Correct_Dustbin_Point;
                                     TruckGameLog.WrongPoint = v.Wrong_Dustbin_Point;
                                     TruckGameLog.ScoreId = v.ScoreId;
+                                    TruckGameLog.TruckImgUrl = imagepath + "/" + Path.GetFileName(v.truckImg);
+                                    TruckGameLog.CapsuleImgUrl = imagepath + "/" + Path.GetFileName(v.capsuleImg);
+                                    TruckGameLog.CenterImgUrl = imagepath + "/" + Path.GetFileName(v.TheamImg);
                                     dbmanager.UpdateTable(TruckGameLog);
                                 }
+                                truckObjName.Add(Path.GetFileNameWithoutExtension(v.truckImg));
+                                truckObjName.Add(Path.GetFileNameWithoutExtension(v.capsuleImg));
+                                truckObjName.Add(Path.GetFileNameWithoutExtension(v.TheamImg));
+                                TruckObjUrl.Add(v.truckImg);
+                                TruckObjUrl.Add(v.capsuleImg);
+                                TruckObjUrl.Add(v.TheamImg);
                             });
                             TruckcenterConfig.ForEach(n =>
                             {
@@ -963,6 +1040,33 @@ public class HomePageScript : MonoBehaviour
                                     dbmanager.UpdateTable(TClog);
                                 }
                             });
+
+                            monsterSpeedModel.ForEach(mon =>
+                            {
+                                var Monsterlog = dbmanager.Table<MonsterSpeed>().FirstOrDefault(l => l.SpeedId == mon.Speed_Id);
+                                if (Monsterlog == null)
+                                {
+                                    MonsterSpeed MSdata = new MonsterSpeed
+                                    {
+                                        GameId = mon.Id_Game,
+                                        SpeedId = mon.Speed_Id,
+                                        Score = mon.Score,
+                                        SpeedValue = mon.Speed_Value
+                                    };
+                                    dbmanager.Insert(MSdata);
+                                }
+                                else
+                                {
+                                    Monsterlog.GameId = mon.Id_Game;
+                                    Monsterlog.SpeedId = mon.Speed_Id;
+                                    Monsterlog.Score = mon.Score;
+                                    Monsterlog.SpeedValue = mon.Speed_Value;
+
+                                    dbmanager.UpdateTable(Monsterlog);
+                                }
+                            });
+
+
 
                         }
 
@@ -1086,6 +1190,10 @@ public class HomePageScript : MonoBehaviour
                         RectImageUrl.Add(x.RectangleImgURL);
                         RoundimageId.Add(x.Id_Game);
                         RoundImageUrl.Add(x.RoundedImgURL);
+                        BGimageid.Add(x.Id_Game);
+                        BGImageUrl.Add(x.BackgroundImgURL);
+                        Level1ImageUrl.Add(x.Level1ImgURl);
+                        Level2ImageUrl.Add(x.Level2ImgURl);
 
                     }
                     else
@@ -1188,7 +1296,11 @@ public class HomePageScript : MonoBehaviour
                                             ItemName = c.item_Name,
                                             CorrectPoint = c.correct_point,
                                             WrongPoint = c.Wrong_point,
-                                            CompletionScore = c.Complete_Score.GetValueOrDefault(0)
+                                            CompletionScore = c.Complete_Score.GetValueOrDefault(0),
+                                            ObjItemZoomImgURL = c.ObjItemZoomImgURL,
+                                            BarrelName = c.BarrelName,
+                                            DustbinImgURL = c.DustbinImgURL,
+                                            ObjItemImgURL = ABGamePath + "/" + c.item_Name + ".png"
                                         };
                                         dbmanager.Insert(objectddata);
                                     }
@@ -1201,8 +1313,14 @@ public class HomePageScript : MonoBehaviour
                                         ObjectLog.CorrectPoint = c.correct_point;
                                         ObjectLog.WrongPoint = c.Wrong_point;
                                         ObjectLog.CompletionScore = c.Complete_Score.GetValueOrDefault(0);
+                                        ObjectLog.ObjItemZoomImgURL = c.ObjItemZoomImgURL;
+                                        ObjectLog.BarrelName = c.BarrelName;
+                                        ObjectLog.DustbinImgURL = c.DustbinImgURL;
+                                        ObjectLog.ObjItemImgURL = ABGamePath + "/" + c.item_Name + ".png";
                                         dbmanager.UpdateTable(ObjectLog);
                                     }
+                                    ObjectName.Add(c.item_Name);
+                                    ObjectUrl.Add(c.ObjItemImgURL);
                                 });
                             }
                         }
@@ -1285,7 +1403,8 @@ public class HomePageScript : MonoBehaviour
                                         {
                                             MonsterId = m.monsterId,
                                             CatchPoint = m.catch_point,
-                                            GameId = m.Id_Game
+                                            GameId = m.Id_Game,
+                                            MonsterImgUrl = imagepath + "/" + Path.GetFileName(m.MonsterImgURL)
                                         };
 
                                         dbmanager.Insert(monsterdata);
@@ -1295,8 +1414,11 @@ public class HomePageScript : MonoBehaviour
                                         monsterlog.MonsterId = m.monsterId;
                                         monsterlog.CatchPoint = m.catch_point;
                                         monsterlog.GameId = m.Id_Game;
+                                        monsterlog.MonsterImgUrl = imagepath + "/" + Path.GetFileName(m.MonsterImgURL);
                                         dbmanager.UpdateTable(monsterlog);
                                     }
+                                    truckObjName.Add(Path.GetFileNameWithoutExtension(m.MonsterImgURL));
+                                    TruckObjUrl.Add(m.MonsterImgURL);
                                 });
                                 TruckConfig.ForEach(v =>
                                 {
@@ -1313,7 +1435,10 @@ public class HomePageScript : MonoBehaviour
                                             DustbinName = v.Dustbins_Name,
                                             CorrectPoint = v.Correct_Dustbin_Point,
                                             WrongPoint = v.Wrong_Dustbin_Point,
-                                            ScoreId = v.ScoreId
+                                            ScoreId = v.ScoreId,
+                                            TruckImgUrl = imagepath + "/" + Path.GetFileName(v.truckImg),
+                                            CapsuleImgUrl = imagepath + "/" + Path.GetFileName(v.capsuleImg),
+                                            CenterImgUrl = imagepath + "/" + Path.GetFileName(v.TheamImg)
                                         };
                                         dbmanager.Insert(TGlog);
                                     }
@@ -1328,8 +1453,17 @@ public class HomePageScript : MonoBehaviour
                                         TruckGameLog.CorrectPoint = v.Correct_Dustbin_Point;
                                         TruckGameLog.WrongPoint = v.Wrong_Dustbin_Point;
                                         TruckGameLog.ScoreId = v.ScoreId;
+                                        TruckGameLog.TruckImgUrl = imagepath + "/" + Path.GetFileName(v.truckImg);
+                                        TruckGameLog.CapsuleImgUrl = imagepath + "/" + Path.GetFileName(v.capsuleImg);
+                                        TruckGameLog.CenterImgUrl = imagepath + "/" + Path.GetFileName(v.TheamImg);
                                         dbmanager.UpdateTable(TruckGameLog);
                                     }
+                                    truckObjName.Add(Path.GetFileNameWithoutExtension(v.truckImg));
+                                    truckObjName.Add(Path.GetFileNameWithoutExtension(v.capsuleImg));
+                                    truckObjName.Add(Path.GetFileNameWithoutExtension(v.TheamImg));
+                                    TruckObjUrl.Add(v.truckImg);
+                                    TruckObjUrl.Add(v.capsuleImg);
+                                    TruckObjUrl.Add(v.TheamImg);
                                 });
                                 TruckcenterConfig.ForEach(n =>
                                 {
@@ -1354,6 +1488,30 @@ public class HomePageScript : MonoBehaviour
                                         TClog.WrongPoint = n.wrong_point;
                                         TClog.ScoreId = n.ScoreId;
                                         dbmanager.UpdateTable(TClog);
+                                    }
+                                });
+
+                                monsterSpeedModel.ForEach(mon =>
+                                {
+                                    var Monsterlog = dbmanager.Table<MonsterSpeed>().FirstOrDefault(l => l.SpeedId == mon.Speed_Id);
+                                    if (Monsterlog == null)
+                                    {
+                                        MonsterSpeed MSdata = new MonsterSpeed
+                                        {
+                                            GameId = mon.Id_Game,
+                                            SpeedId = mon.Speed_Id,
+                                            Score = mon.Score,
+                                            SpeedValue = mon.Speed_Value
+                                         };
+                                        dbmanager.Insert(MSdata);
+                                    }
+                                    else
+                                    {
+                                        Monsterlog.GameId = mon.Id_Game;
+                                        Monsterlog.SpeedId = mon.Speed_Id;
+                                        Monsterlog.Score = mon.Score;
+                                        Monsterlog.SpeedValue = mon.Speed_Value;
+                                        dbmanager.UpdateTable(Monsterlog);
                                     }
                                 });
                             }
@@ -1486,45 +1644,93 @@ public class HomePageScript : MonoBehaviour
                         LocalgameConfig.CompletePer = int.Parse(x.completePer);
                         LocalgameConfig.RoundImageUrl = RoundlocalPath + "/" + x.Id_Game + ".png";
                         LocalgameConfig.RectImageUrl = Rectlocalpath + "/" + x.Id_Game + ".png";
+                        LocalgameConfig.BackgroundImgURL = BackgroundPath + "/" + x.Id_Game + ".png";
+                        LocalgameConfig.Level1ImgURl = Level1Path + "/" + x.Id_Game + ".png";
+                        LocalgameConfig.Level2ImgURl = Level2Path + "/" + x.Id_Game + ".png";
                         LocalgameConfig.UpdateFlag = x.UpdatedFlag;
                         dbmanager.UpdateTable(LocalgameConfig);
+
+                        //LIST FOR IMAGE DOWNLOADING ASSETS
                         RectImageId.Add(x.Id_Game);
                         RectImageUrl.Add(x.RectangleImgURL);
                         RoundimageId.Add(x.Id_Game);
                         RoundImageUrl.Add(x.RoundedImgURL);
+                        BGimageid.Add(x.Id_Game);
+                        BGImageUrl.Add(x.BackgroundImgURL);
+                        Level1ImageUrl.Add(x.Level1ImgURl);
+                        Level2ImageUrl.Add(x.Level2ImgURl);
                     }
                 });
 
                 for (int a = 0; a < AnagramImageUrl.Count; a++)
                 {
                     yield return new WaitForSeconds(0.2f);
-                    StartCoroutine(GetTexture(Anagrameimageid[a], AnagramImageUrl[a], AnagramDir));
+                    StartCoroutine(GetTexture(Anagrameimageid[a].ToString(), AnagramImageUrl[a], AnagramDir));
                 }
                
                 yield return new WaitForSeconds(1f);
                 for (int a = 0; a < LocationUrl.Count; a++)
                 {
                     yield return new WaitForSeconds(0.2f);
-                    StartCoroutine(GetTexture(LocationId[a], LocationUrl[a], MatchTheTileLoactionFolder));
+                    StartCoroutine(GetTexture(LocationId[a].ToString(), LocationUrl[a], MatchTheTileLoactionFolder));
                 }
                 yield return new WaitForSeconds(1f);
                 for (int a = 0; a < FlagUrl.Count; a++)
                 {
                     yield return new WaitForSeconds(0.2f);
-                    StartCoroutine(GetTexture(FlagID[a], FlagUrl[a], MatchTheTileFlagFolder));
+                    StartCoroutine(GetTexture(FlagID[a].ToString(), FlagUrl[a], MatchTheTileFlagFolder));
                 }
                 yield return new WaitForSeconds(1f);
                 for (int a = 0; a < RoundImageUrl.Count; a++)
                 {
                     yield return new WaitForSeconds(0.2f);
-                    StartCoroutine(GetTexture(RoundimageId[a], RoundImageUrl[a], RoundimagePreviewFolder));
+                    StartCoroutine(GetTexture(RoundimageId[a].ToString(), RoundImageUrl[a], RoundimagePreviewFolder));
                 }
                 yield return new WaitForSeconds(1f);
                 for (int a = 0; a < RectImageUrl.Count; a++)
                 {
                     yield return new WaitForSeconds(0.2f);
-                    StartCoroutine(GetTexture(RectImageId[a], RectImageUrl[a], RectImagepreviewFolder));
+                    StartCoroutine(GetTexture(RectImageId[a].ToString(), RectImageUrl[a], RectImagepreviewFolder));
                 }
+
+                yield return new WaitForSeconds(1f);
+                for (int a = 0; a < BGImageUrl.Count; a++)
+                {
+                    yield return new WaitForSeconds(0.2f);
+                    StartCoroutine(GetTexture(BGimageid[a].ToString(), BGImageUrl[a], GameBackgroundImageFolder));
+                }
+                yield return new WaitForSeconds(1f);
+                for (int a = 0; a < Level1ImageUrl.Count; a++)
+                {
+                    if(Level1ImageUrl[a] != null)
+                    {
+                        yield return new WaitForSeconds(0.2f);
+                        StartCoroutine(GetTexture(BGimageid[a].ToString(), Level1ImageUrl[a], Level1ImageFolder));
+                    }
+                }
+                yield return new WaitForSeconds(1f);
+                for (int a = 0; a < Level2ImageUrl.Count; a++)
+                {
+                    if(Level2ImageUrl[a] != null)
+                    {
+                        yield return new WaitForSeconds(0.2f);
+                        StartCoroutine(GetTexture(BGimageid[a].ToString(), Level2ImageUrl[a], Level2ImageFolder));
+                    }
+                }
+                yield return new WaitForSeconds(1f);
+                for (int a = 0; a < ObjectUrl.Count; a++)
+                {
+                    yield return new WaitForSeconds(0.2f);
+                    StartCoroutine(GetTexture(ObjectName[a], ObjectUrl[a], ABimage));
+                }
+
+                yield return new WaitForSeconds(1f);
+                for (int a = 0; a < TruckObjUrl.Count; a++)
+                {
+                    yield return new WaitForSeconds(0.2f);
+                    StartCoroutine(GetTexture(truckObjName[a], TruckObjUrl[a], TruckGameImage));
+                }
+
                 yield return new WaitForSeconds(2f);
                 StartCoroutine(GetuserAvatar());
                 
@@ -1551,6 +1757,7 @@ public class HomePageScript : MonoBehaviour
         dbmanager.Execute("DELETE from MatchTheTileFlag");
         dbmanager.Execute("DELETE from MatchTheTileLocation");
         dbmanager.Execute("DELETE from PercentileTable");
+        dbmanager.Execute("DELETE from MonsterSpeed");
         PlayerPrefs.DeleteKey("Loggedin");
         iTween.ScaleTo(LogOutpage, Vector3.zero, 0.4f);
         yield return new WaitForSeconds(0.5f);

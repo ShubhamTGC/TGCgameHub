@@ -19,7 +19,7 @@ public class MatchTheTile : MonoBehaviour
     public Sprite[] DustbinSprite, WasteSprite;
     [SerializeField]
     private List<Sprite> GeneratedSprite = new List<Sprite>();
-    private List<GameObject> GeneratedTiles = new List<GameObject>();
+    [SerializeField]private List<GameObject> GeneratedTiles = new List<GameObject>();
     public string DustbinPath, WastePath;
 
     //========== TILE GAME MAIN LOGIC VARIABLES================
@@ -90,6 +90,7 @@ public class MatchTheTile : MonoBehaviour
     public AudioClip wrongclip, Rightclip;
     public GameObject Scartchcardpage;
     private bool IsPassed;
+    [SerializeField] private float CardShowTime = 0.1f;
     void Start()
     {
         homeinstance = HomePageScript.Homepage;
@@ -302,7 +303,28 @@ public class MatchTheTile : MonoBehaviour
             gb.name = a.ToString();
             gb.SetActive(true);
         }
+        StartCoroutine(ShowCards());
 
+
+    }
+
+    IEnumerator ShowCards()
+    {
+
+        yield return new WaitForSeconds(0.5f);
+        for (int b = 0; b < GeneratedSprite.Count; b++)
+        {
+            GeneratedTiles[b].transform.GetChild(0).GetComponent<Image>().sprite = GeneratedSprite[b];
+            GeneratedTiles[b].GetComponent<Button>().enabled = false;
+            yield return new WaitForSeconds(CardShowTime);
+        }
+        yield return new WaitForSeconds(1f);
+        for (int b = 0; b < GeneratedSprite.Count; b++)
+        {
+            GeneratedTiles[b].transform.GetChild(0).GetComponent<Image>().sprite = Defaultobj;
+            GeneratedTiles[b].GetComponent<Button>().enabled = true;
+            yield return new WaitForSeconds(CardShowTime);
+        }
     }
 
     void SpriteMixer()

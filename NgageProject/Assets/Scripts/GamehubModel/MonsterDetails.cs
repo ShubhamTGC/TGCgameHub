@@ -7,6 +7,7 @@ public class MonsterDetails
     public int MonsterId { get; set; }
     public int CatchPoint { get; set; }
     public int GameId { get; set; }
+    public string MonsterImgUrl { get; set; }
 
     
 }

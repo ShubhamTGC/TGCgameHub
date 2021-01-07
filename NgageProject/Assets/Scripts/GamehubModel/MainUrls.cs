@@ -23,5 +23,9 @@ public class MainUrls
     public static string PostScratchCard = "scratchcarduserLog";
     public static string PostCardID = "IsSratch";
     public static string GetUserCards = "GetUserScratchCard";
+    public static string PassBookApi = "GetPassBook";
+    public static string LogicalbaniyaUrl = "https://demo.thelogicalbanya.com/kbba/";
+    public static string PostCoupondataApi = "http://140.238.249.68/TGCGame/api/rewardsreedmeLog";
+    public static string GetCouponListApi = "GetCouponDetails";
 
 }

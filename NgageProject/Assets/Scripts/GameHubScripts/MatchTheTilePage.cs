@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using SimpleSQL;
 using System.Linq;
+using UnityEngine.UI;
 
 public class MatchTheTilePage : MonoBehaviour
 {
@@ -16,11 +17,16 @@ public class MatchTheTilePage : MonoBehaviour
     private AudioSource audioSource;
     public GameObject Loadingbar;
     public CustomLoader loader;
+    [SerializeField] private int gameid = 4;
+    private Sprite gamesprite;
+    public GameObject gamemainpage;
     private void Awake()
     {
         Loadingbar.SetActive(true);
         StartCoroutine(AvatarSelection());
         audioSource = Camera.main.gameObject.GetComponent<AudioSource>();
+        var gameimage = dbmanager.Table<GameListDetails>().FirstOrDefault(x => x.GameId == gameid).BackgroundImgURL;
+        StartCoroutine(GameIamgeSprite(gameimage));
         StartCoroutine(getSoundData());
     }
     void Start()
@@ -144,6 +150,15 @@ public class MatchTheTilePage : MonoBehaviour
 
         loader.Isdone = true;
         GameGuidepage.SetActive(true);
+
+    }
+
+    IEnumerator GameIamgeSprite(string imageurl)
+    {
+        yield return new WaitForSeconds(0.05f);
+        gamesprite = GetAvatarSprite(imageurl, "background");
+        gamemainpage.GetComponent<Image>().sprite = gamesprite;
+
 
     }
 }
